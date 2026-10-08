@@ -11,3 +11,4 @@ export * from './mezmur';
 export * from './editorial';
 export * from './events';
 export * from './galleries';
+export * from './search';
