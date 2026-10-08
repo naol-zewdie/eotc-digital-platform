@@ -5,3 +5,4 @@ export * from './auth';
 export * from './audit';
 export * from './storage';
 export * from './rights';
+export * from './library';
