@@ -6,3 +6,4 @@ export * from './audit';
 export * from './storage';
 export * from './rights';
 export * from './library';
+export * from './churches';

@@ -86,6 +86,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const navItems = [
     { href: '/admin', label: 'Console Overview', icon: LayoutDashboard },
     { href: '/admin/library', label: 'Library & Books', icon: BookOpen },
+    { href: '/admin/churches', label: 'Churches & Monasteries', icon: Church },
     { href: '/admin/media', label: 'Media & Uploads', icon: UploadCloud },
     { href: '/admin/rights', label: 'Rights & Provenance', icon: ShieldCheck },
     { href: '/admin/audit', label: 'Audit Trail (Section 27)', icon: History },
