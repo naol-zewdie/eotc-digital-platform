@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "ES2022",
+    "skipLibCheck": true,
+    "paths": {
+      "@eotc/contracts": ["packages/contracts/src"],
+      "@prisma/client": ["node_modules/@prisma/client"],
+      ".prisma/client/*": ["node_modules/.prisma/client/*"]
+    }
+  },
+  "references": [
+    { "path": "./packages/contracts" },
+    { "path": "./apps/api" },
+    { "path": "./apps/web" }
+  ],
+  "files": [],
+  "include": []
+}
