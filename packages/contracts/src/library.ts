@@ -9,6 +9,7 @@ export interface BookTranslationDto {
   title: string;
   description?: string | null;
   author?: string | null;
+  authorDisplayName?: string | null;
   publisher?: string | null;
   createdAt?: string;
   updatedAt?: string;
@@ -32,11 +33,17 @@ export interface BookDto {
   status: ContentStatus;
   author?: string | null;
   publishedYear?: number | null;
+  publicationYear?: number | null;
   fileId?: string | null;
   rightsId?: string | null;
   coverImageId?: string | null;
   churchId?: string | null;
   categoryId?: string | null;
+  categoryNameAm?: string | null;
+  categoryNameEn?: string | null;
+  pageCount?: number | null;
+  viewCount?: number;
+  downloadCount?: number;
   createdById?: string | null;
   approvedById?: string | null;
   publishedAt?: string | null;

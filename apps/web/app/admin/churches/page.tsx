@@ -390,14 +390,14 @@ export default function AdminChurchesPage() {
                     <td className="px-5 py-4 whitespace-nowrap font-mono text-[11px]">
                       {church.coordinates ? (
                         <a
-                          href={`https://www.google.com/maps?q=${church.coordinates.lat},${church.coordinates.lng}`}
+                          href={`https://www.google.com/maps?q=${church.coordinates.lat ?? church.coordinates.latitude},${church.coordinates.lng ?? church.coordinates.longitude}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1.5 text-eotc-gold hover:underline"
                         >
                           <MapPin className="w-3.5 h-3.5 text-eotc-crimson" />
                           <span>
-                            {church.coordinates.lat.toFixed(4)}, {church.coordinates.lng.toFixed(4)}
+                            {(church.coordinates.lat ?? church.coordinates.latitude ?? 0).toFixed(4)}, {(church.coordinates.lng ?? church.coordinates.longitude ?? 0).toFixed(4)}
                           </span>
                         </a>
                       ) : (

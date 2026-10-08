@@ -1,8 +1,10 @@
 import { VerificationStatus, ContentStatus } from './enums';
 
 export interface ChurchCoordinatesDto {
-  lat: number;
-  lng: number;
+  lat?: number;
+  lng?: number;
+  latitude?: number;
+  longitude?: number;
 }
 
 export interface ChurchContactsDto {
@@ -42,6 +44,8 @@ export interface ChurchDto {
   region?: string | null;
   city?: string | null;
   diocese?: string | null;
+  dioceseNameAm?: string | null;
+  dioceseNameEn?: string | null;
   isMonastery?: boolean;
   coordinates?: ChurchCoordinatesDto | null;
   contacts?: ChurchContactsDto | null;
