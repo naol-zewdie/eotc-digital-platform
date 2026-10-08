@@ -7,3 +7,5 @@ export * from './storage';
 export * from './rights';
 export * from './library';
 export * from './churches';
+export * from './mezmur';
+export * from './editorial';
