@@ -30,6 +30,15 @@ export enum ArticleType {
   NEWS = 'NEWS',
 }
 
+export enum EventType {
+  LITURGICAL_FEAST = 'LITURGICAL_FEAST',
+  PATRONAL_FEAST = 'PATRONAL_FEAST',
+  FAST_BEGIN = 'FAST_BEGIN',
+  FAST_END = 'FAST_END',
+  PARISH_CONFERENCE = 'PARISH_CONFERENCE',
+  PRAYER_VIGIL = 'PRAYER_VIGIL',
+}
+
 export enum MediaType {
   IMAGE = 'IMAGE',
   AUDIO = 'AUDIO',

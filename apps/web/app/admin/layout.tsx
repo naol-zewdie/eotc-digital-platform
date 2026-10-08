@@ -10,12 +10,14 @@ import {
   Church,
   FileText,
   Music,
+  Calendar,
   Activity,
   History,
   LogOut,
   ChevronRight,
   UserCheck,
   UploadCloud,
+  Images,
   ShieldCheck,
 } from 'lucide-react';
 
@@ -90,7 +92,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: '/admin/churches', label: 'Churches & Monasteries', icon: Church },
     { href: '/admin/mezmur', label: 'Mezmur & Hymns', icon: Music },
     { href: '/admin/editorial', label: 'Editorial & News', icon: FileText },
+    { href: '/admin/events', label: 'Calendar & Feasts', icon: Calendar },
     { href: '/admin/media', label: 'Media & Uploads', icon: UploadCloud },
+    { href: '/admin/galleries', label: 'Sacred Galleries', icon: Images },
     { href: '/admin/rights', label: 'Rights & Provenance', icon: ShieldCheck },
     { href: '/admin/audit', label: 'Audit Trail (Section 27)', icon: History },
   ];
