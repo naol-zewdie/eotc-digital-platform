@@ -2,6 +2,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "moduleResolution": "node",
+    "allowJs": true,
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -11,10 +12,11 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
+    "rootDir": "./",
     "paths": {
       "@prisma/client": ["../../node_modules/@prisma/client"],
       ".prisma/client/*": ["../../node_modules/.prisma/client/*"],
-      "@eotc/contracts": ["../../packages/contracts/src"]
+      "@eotc/contracts": ["../../packages/contracts/dist"]
     },
     "incremental": true,
     "skipLibCheck": true,
