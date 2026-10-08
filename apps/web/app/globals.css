@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #FBF9F4;
+  --foreground: #1A1A1A;
+  --card: #FFFFFF;
+  --card-foreground: #1A1A1A;
+  --primary: #7A1B1B;
+  --primary-foreground: #FFFFFF;
+  --secondary: #D4AF37;
+  --border: #E8E2D9;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0D0F12;
+    --foreground: #F3F4F6;
+    --card: #151921;
+    --card-foreground: #F3F4F6;
+    --primary: #9E2A2B;
+    --primary-foreground: #FFFFFF;
+    --secondary: #D4AF37;
+    --border: #262C38;
+  }
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', 'Noto Sans Ethiopic', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.heading-font {
+  font-family: 'Cinzel', 'Noto Sans Ethiopic', serif;
+}
+
+.ethiopic-font {
+  font-family: 'Noto Sans Ethiopic', sans-serif;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.dark .glass-panel {
+  background: rgba(21, 25, 33, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+}

@@ -1,0 +1,24 @@
+{
+  "name": "eotc-digital-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ethiopian Orthodox Tewahedo Digital Platform - Modular Monolith",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run --workspaces --if-present build",
+    "lint": "npm run --workspaces --if-present lint",
+    "test": "npm run --workspaces --if-present test",
+    "dev:api": "npm --workspace=apps/api run dev",
+    "dev:web": "npm --workspace=apps/web run dev",
+    "prisma:generate": "npm --workspace=apps/api run prisma:generate",
+    "prisma:seed": "npm --workspace=apps/api run prisma:seed",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}
