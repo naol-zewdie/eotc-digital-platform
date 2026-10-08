@@ -13,6 +13,8 @@ import { DonationsModule } from './modules/donations/donations.module';
 import { SearchModule } from './modules/search/search.module';
 import { ModerationModule } from './modules/moderation/moderation.module';
 import { AuditModule } from './modules/audit/audit.module';
+import { StorageModule } from './common/storage/storage.module';
+import { RightsModule } from './modules/rights/rights.module';
 import { RequestIdMiddleware } from './common/observability/request-id.middleware';
 
 @Module({
@@ -34,6 +36,8 @@ import { RequestIdMiddleware } from './common/observability/request-id.middlewar
     SearchModule,
     ModerationModule,
     AuditModule,
+    StorageModule,
+    RightsModule,
   ],
 })
 export class AppModule implements NestModule {

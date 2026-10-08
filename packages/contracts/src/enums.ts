@@ -30,6 +30,13 @@ export enum ArticleType {
   NEWS = 'NEWS',
 }
 
+export enum MediaType {
+  IMAGE = 'IMAGE',
+  AUDIO = 'AUDIO',
+  VIDEO = 'VIDEO',
+  DOCUMENT = 'DOCUMENT',
+}
+
 export enum VerificationStatus {
   UNVERIFIED = 'UNVERIFIED',
   PENDING_REVIEW = 'PENDING_REVIEW',

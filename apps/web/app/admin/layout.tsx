@@ -14,6 +14,8 @@ import {
   LogOut,
   ChevronRight,
   UserCheck,
+  UploadCloud,
+  ShieldCheck,
 } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -83,6 +85,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const navItems = [
     { href: '/admin', label: 'Console Overview', icon: LayoutDashboard },
+    { href: '/admin/media', label: 'Media & Uploads', icon: UploadCloud },
+    { href: '/admin/rights', label: 'Rights & Provenance', icon: ShieldCheck },
     { href: '/admin/audit', label: 'Audit Trail (Section 27)', icon: History },
   ];
 
