@@ -2,7 +2,10 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { BookOpen, Music, Church, Calendar, Newspaper, Search, Heart, Menu, X, Shield } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { Search, X } from 'lucide-react';
+import { DoorDennisButton } from './DoorDennis/DoorDennisButton';
+import { GridLines } from './DoorDennis/GridLines';
 
 interface NavbarProps {
   currentLocale?: string;
@@ -10,169 +13,252 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ currentLocale = 'am' }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isEn = currentLocale === 'en';
+  const isGez = currentLocale === 'gez';
 
-  const navLinks = [
-    { href: `/${currentLocale}/library`, labelEn: 'Library', labelAm: 'መጻሕፍት ቤት', icon: BookOpen },
-    { href: `/${currentLocale}/mezmur`, labelEn: 'Mezmur', labelAm: 'መዝሙር', icon: Music },
-    { href: `/${currentLocale}/churches`, labelEn: 'Churches', labelAm: 'አብያተ ክርስቲያናት', icon: Church },
-    { href: `/${currentLocale}/articles`, labelEn: 'Articles & News', labelAm: 'ትምህርተ ሃይማኖትና ዜና', icon: Newspaper },
-    { href: `/${currentLocale}/events`, labelEn: 'Events', labelAm: 'ክስተቶችና በዓላት', icon: Calendar },
+  // Navigation Items formatted matching Door Dennis Header Pills
+  const navItems = [
+    {
+      href: `/${currentLocale}`,
+      label: isGez ? 'መቅድም' : isEn ? 'HOME' : 'መነሻ',
+      exact: true,
+    },
+    {
+      href: `/${currentLocale}/articles`,
+      label: isGez ? 'ትውፊት' : isEn ? 'ABOUT' : 'ስለ እኛ',
+    },
+    {
+      href: `/${currentLocale}/library`,
+      label: isGez ? 'መዛግብት' : isEn ? 'WERK' : 'መዛግብት',
+      count: isEn ? '34' : '፫፬',
+    },
+    {
+      href: `/${currentLocale}/mezmur`,
+      label: isGez ? 'ማኅሌት' : isEn ? 'SERVICES' : 'አገልግሎት',
+    },
+    {
+      href: `/${currentLocale}/churches`,
+      label: isGez ? 'ገዳማት' : isEn ? 'CONTACT' : 'ግንኙነት',
+    },
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full glass-panel border-b border-eotc-gold/30 transition-all shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          {/* Logo & Platform Name */}
-          <Link href={`/${currentLocale}`} className="flex items-center gap-3.5 group">
-            <div className="w-11 h-11 rounded-lg bg-gradient-to-br from-eotc-crimson to-eotc-crimson-dark flex items-center justify-center text-eotc-gold shadow-md border border-eotc-gold/40 group-hover:scale-105 transition-transform">
-              <span className="heading-font text-2xl font-bold tracking-wider">✝</span>
-            </div>
-            <div>
-              <div className="text-lg font-bold tracking-tight text-eotc-crimson dark:text-eotc-gold flex items-center gap-2">
-                <span>EOTC Digital Platform</span>
-              </div>
-              <div className="text-xs text-neutral-600 dark:text-neutral-400 ethiopic-font font-medium">
-                የኢትዮጵያ ኦርቶዶክስ ተዋሕዶ ቤተክርስቲያን ዲጂታል መድረክ
-              </div>
-            </div>
-          </Link>
+    <>
+      <header className="sticky top-0 z-50 w-full bg-[#F7F5F0]/85 backdrop-blur-md border-b border-[#201F1E]/10 transition-all duration-300">
+        {/* 9 Architectural Lines passing through Header */}
+        <GridLines count={9} opacity={0.06} />
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center space-x-1 xl:space-x-2">
-            {navLinks.map((item) => {
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="px-3.5 py-2 rounded-md text-sm font-medium text-neutral-700 dark:text-neutral-200 hover:text-eotc-crimson dark:hover:text-eotc-gold hover:bg-eotc-gold/10 transition-colors flex items-center gap-1.5"
-                >
-                  <Icon className="w-4 h-4 opacity-75" />
-                  <span>{currentLocale === 'am' ? item.labelAm : item.labelEn}</span>
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* Quick Actions & Locale switcher */}
-          <div className="hidden md:flex items-center gap-3">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="flex items-center justify-between h-20">
+            {/* Left: EOTC Monogram & Logo Wordmark */}
             <Link
-              href={`/${currentLocale}/search`}
-              className="p-2.5 rounded-full text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-              title="Search / ፈልግ"
-              aria-label="Search"
+              href={`/${currentLocale}`}
+              className="flex items-center gap-3 group text-[#201F1E]"
+              title="Ethiopian Orthodox Tewahedo Church"
             >
-              <Search className="w-4 h-4" />
+              <div className="w-10 h-10 rounded-xl bg-[#201F1E] text-[#F7F5F0] flex items-center justify-center font-serif text-xl font-bold group-hover:scale-105 transition-transform shadow-sm">
+                ✝
+              </div>
+              <div className="flex flex-col">
+                <span className="font-extrabold tracking-tight text-sm sm:text-base font-serif uppercase text-[#201F1E]">
+                  {isEn ? 'EOTC PATRIARCHATE' : isGez ? 'ተዋሕዶ ቤተክርስቲያን' : 'የኢትዮጵያ ኦርቶዶክስ ተዋሕዶ'}
+                </span>
+                <span className="text-[10px] text-[#5C5A56] font-mono uppercase tracking-wider">
+                  {isEn ? 'DIGITAL ARCHIVE PLATFORM' : isGez ? 'ብሔራዊ ዲጂታል መዝገብ' : 'ብሔራዊ ዲጂታል መድረክ'}
+                </span>
+              </div>
             </Link>
 
-            {/* Locale selector */}
-            <div className="flex items-center border border-eotc-gold/40 rounded-full text-xs font-semibold overflow-hidden p-0.5 bg-neutral-50 dark:bg-neutral-900">
+            {/* Right: Signature Door Dennis Outline Pills & Controls */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              {/* Desktop Rounded Rectangular Navigation Pills matching Screenshot 1 & 2 */}
+              <nav className="hidden lg:flex items-center gap-2">
+                {navItems.map((item) => {
+                  const isActive = item.exact
+                    ? pathname === item.href
+                    : pathname.startsWith(item.href);
+
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={`h-9 px-4 rounded-xl text-xs font-semibold tracking-wider uppercase transition-all duration-200 flex items-center justify-center gap-1 border ${
+                        isActive
+                          ? 'border-[#C89D3C] text-[#C89D3C] bg-[#C89D3C]/5 shadow-sm'
+                          : 'border-[#201F1E]/20 text-[#201F1E] hover:border-[#201F1E] hover:bg-[#201F1E]/5'
+                      }`}
+                    >
+                      <span>{item.label}</span>
+                      {item.count && (
+                        <sup className="text-[9px] font-mono ml-0.5 font-bold">
+                          {item.count}
+                        </sup>
+                      )}
+                    </Link>
+                  );
+                })}
+              </nav>
+
+              {/* Language Switcher in matching clean pill style */}
+              <div className="hidden sm:flex items-center border border-[#201F1E]/20 rounded-xl p-0.5 text-[11px] font-mono font-bold bg-[#FAF9F6]">
+                <Link
+                  href="/am"
+                  className={`px-2 py-0.5 rounded-lg transition-all ${
+                    currentLocale === 'am'
+                      ? 'bg-[#201F1E] text-[#F7F5F0]'
+                      : 'text-[#5C5A56] hover:text-[#201F1E]'
+                  }`}
+                >
+                  አማ
+                </Link>
+                <Link
+                  href="/gez"
+                  className={`px-2 py-0.5 rounded-lg transition-all ${
+                    currentLocale === 'gez'
+                      ? 'bg-[#201F1E] text-[#F7F5F0]'
+                      : 'text-[#5C5A56] hover:text-[#201F1E]'
+                  }`}
+                >
+                  ግዕዝ
+                </Link>
+                <Link
+                  href="/en"
+                  className={`px-2 py-0.5 rounded-lg transition-all ${
+                    currentLocale === 'en'
+                      ? 'bg-[#201F1E] text-[#F7F5F0]'
+                      : 'text-[#5C5A56] hover:text-[#201F1E]'
+                  }`}
+                >
+                  EN
+                </Link>
+              </div>
+
+              {/* Search Icon */}
+              <Link
+                href={`/${currentLocale}/search`}
+                className="w-9 h-9 rounded-xl border border-[#201F1E]/20 flex items-center justify-center text-[#201F1E] hover:border-[#201F1E] hover:bg-[#201F1E]/5 transition-all"
+                title="Search Archives"
+                aria-label="Search Archives"
+              >
+                <Search className="w-3.5 h-3.5" />
+              </Link>
+
+              {/* Signature Door Dennis Dark Hamburger Button (matching Screenshot 1 & 2) */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="w-10 h-10 rounded-xl bg-[#201F1E] text-[#F7F5F0] flex flex-col items-center justify-center gap-1.5 shadow-sm hover:bg-[#33312E] transition-all"
+                aria-label="Toggle navigation drawer"
+              >
+                <span className="w-4 h-[2px] bg-[#F7F5F0] rounded-full transition-transform" />
+                <span className="w-4 h-[2px] bg-[#F7F5F0] rounded-full transition-transform" />
+                <span className="w-4 h-[2px] bg-[#F7F5F0] rounded-full transition-transform" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Full-screen Overlay Navigation Drawer */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 bg-[#F7F5F0] flex flex-col justify-between p-6 sm:p-12 overflow-y-auto">
+          {/* Top Bar of Drawer */}
+          <div className="flex items-center justify-between border-b border-[#201F1E]/10 pb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-[#201F1E] text-[#F7F5F0] flex items-center justify-center font-serif text-xl font-bold">
+                ✝
+              </div>
+              <span className="font-serif font-bold uppercase text-lg text-[#201F1E]">
+                {isEn ? 'EOTC Platform' : 'ተዋሕዶ ዲጂታል'}
+              </span>
+            </div>
+
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-10 h-10 rounded-xl bg-[#201F1E] text-[#F7F5F0] flex items-center justify-center hover:bg-[#33312E] transition-colors"
+              aria-label="Close menu"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Drawer Links */}
+          <div className="py-12 space-y-4">
+            {navItems.map((item, idx) => {
+              const isActive = item.exact
+                ? pathname === item.href
+                : pathname.startsWith(item.href);
+
+              return (
+                <div key={item.href} className="overflow-hidden">
+                  <Link
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`block text-3xl sm:text-5xl font-serif uppercase tracking-tight py-2 transition-colors ${
+                      isActive
+                        ? 'text-[#C89D3C]'
+                        : 'text-[#201F1E] hover:text-[#C89D3C]'
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                    {item.count && (
+                      <span className="text-sm font-mono ml-3 text-[#5C5A56]">
+                        {item.count}
+                      </span>
+                    )}
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Bottom Drawer Controls */}
+          <div className="pt-8 border-t border-[#201F1E]/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+            {/* Language Selection */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono uppercase text-[#5C5A56] mr-2">Language:</span>
               <Link
                 href="/am"
-                className={`px-2.5 py-1 rounded-full transition-colors ${
-                  currentLocale === 'am' ? 'bg-eotc-crimson text-white shadow-sm' : 'text-neutral-600 hover:text-black dark:text-neutral-400'
+                onClick={() => setMobileMenuOpen(false)}
+                className={`px-3 py-1.5 rounded-xl border text-xs font-mono font-bold ${
+                  currentLocale === 'am'
+                    ? 'bg-[#201F1E] text-[#F7F5F0] border-[#201F1E]'
+                    : 'border-[#201F1E]/20 text-[#201F1E]'
                 }`}
               >
-                አማ
+                አማርኛ
               </Link>
               <Link
                 href="/gez"
-                className={`px-2.5 py-1 rounded-full transition-colors ${
-                  currentLocale === 'gez' ? 'bg-eotc-crimson text-white shadow-sm' : 'text-neutral-600 hover:text-black dark:text-neutral-400'
+                onClick={() => setMobileMenuOpen(false)}
+                className={`px-3 py-1.5 rounded-xl border text-xs font-mono font-bold ${
+                  currentLocale === 'gez'
+                    ? 'bg-[#201F1E] text-[#F7F5F0] border-[#201F1E]'
+                    : 'border-[#201F1E]/20 text-[#201F1E]'
                 }`}
               >
                 ግዕዝ
               </Link>
               <Link
                 href="/en"
-                className={`px-2.5 py-1 rounded-full transition-colors ${
-                  currentLocale === 'en' ? 'bg-eotc-crimson text-white shadow-sm' : 'text-neutral-600 hover:text-black dark:text-neutral-400'
+                onClick={() => setMobileMenuOpen(false)}
+                className={`px-3 py-1.5 rounded-xl border text-xs font-mono font-bold ${
+                  currentLocale === 'en'
+                    ? 'bg-[#201F1E] text-[#F7F5F0] border-[#201F1E]'
+                    : 'border-[#201F1E]/20 text-[#201F1E]'
                 }`}
               >
-                EN
+                English
               </Link>
             </div>
 
-            <Link
-              href={`/${currentLocale}/donate`}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold bg-gradient-to-r from-eotc-gold to-amber-500 text-neutral-950 hover:brightness-105 shadow-sm transition-all"
-            >
-              <Heart className="w-3.5 h-3.5 fill-current" />
-              <span>{currentLocale === 'am' ? 'ይደግፉ' : 'Support / Donate'}</span>
-            </Link>
-
-            <Link
-              href="/admin"
-              className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-neutral-600 dark:text-neutral-400 hover:text-eotc-crimson border border-neutral-300 dark:border-neutral-700 rounded-md transition-colors"
-            >
-              <Shield className="w-3 h-3" />
-              <span>Admin</span>
-            </Link>
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="flex lg:hidden items-center gap-2">
-            <Link
-              href={`/${currentLocale}/search`}
-              className="p-2 rounded-full text-neutral-700 dark:text-neutral-200"
-              aria-label="Search"
-            >
-              <Search className="w-5 h-5" />
-            </Link>
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-md text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 focus:outline-none"
-              aria-label="Toggle navigation menu"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-eotc-gold/20 bg-background/95 backdrop-blur-md px-4 pt-3 pb-6 space-y-3">
-          <div className="flex justify-center gap-2 pb-2 border-b border-neutral-200 dark:border-neutral-800">
-            <Link href="/am" className="px-3 py-1 text-xs rounded-full bg-neutral-200 dark:bg-neutral-800">አማርኛ</Link>
-            <Link href="/gez" className="px-3 py-1 text-xs rounded-full bg-neutral-200 dark:bg-neutral-800">ግዕዝ</Link>
-            <Link href="/en" className="px-3 py-1 text-xs rounded-full bg-neutral-200 dark:bg-neutral-800">English</Link>
-          </div>
-          {navLinks.map((item) => {
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-base font-medium text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
-              >
-                <Icon className="w-5 h-5 text-eotc-crimson dark:text-eotc-gold" />
-                <span>{currentLocale === 'am' ? item.labelAm : item.labelEn}</span>
-              </Link>
-            );
-          })}
-          <div className="pt-2 flex flex-col gap-2">
-            <Link
-              href={`/${currentLocale}/donate`}
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-eotc-gold text-black font-semibold text-sm"
-            >
-              <Heart className="w-4 h-4 fill-current" />
-              <span>{currentLocale === 'am' ? 'ይደግፉ' : 'Support / Donate'}</span>
-            </Link>
-            <Link
-              href="/admin"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-center gap-1.5 w-full py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 text-xs font-medium text-neutral-600 dark:text-neutral-400"
-            >
-              <Shield className="w-3.5 h-3.5" />
-              <span>Admin Portal / የቁጥጥር ማዕከል</span>
-            </Link>
+            {/* Support CTA */}
+            <DoorDennisButton href={`/${currentLocale}/donate`}>
+              {isEn ? 'Support Archives' : isGez ? 'ምጽዋተ ገዳማት' : 'ቅርሶቹን ይደግፉ'}
+            </DoorDennisButton>
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 };

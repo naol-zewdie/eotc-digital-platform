@@ -19,6 +19,7 @@ import {
   UploadCloud,
   Images,
   ShieldCheck,
+  Heart,
 } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -96,7 +97,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: '/admin/media', label: 'Media & Uploads', icon: UploadCloud },
     { href: '/admin/galleries', label: 'Sacred Galleries', icon: Images },
     { href: '/admin/rights', label: 'Rights & Provenance', icon: ShieldCheck },
+    { href: '/admin/donations', label: 'Donations & Campaigns', icon: Heart },
+    { href: '/admin/moderation', label: 'Diocesan Moderation Desk', icon: UserCheck },
     { href: '/admin/audit', label: 'Audit Trail (Section 27)', icon: History },
+    { href: '/admin/operations', label: 'Operations & Telemetry', icon: Activity },
   ];
 
   return (

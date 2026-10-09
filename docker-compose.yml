@@ -72,6 +72,19 @@ services:
     ports:
       - "3000:3000"
 
+  proxy:
+    image: nginx:alpine
+    container_name: eotc_proxy
+    restart: unless-stopped
+    depends_on:
+      - api
+      - web
+    ports:
+      - "80:80"
+    volumes:
+      - ./infrastructure/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+
 volumes:
   postgres_data:
   minio_data:
+  backups_data:

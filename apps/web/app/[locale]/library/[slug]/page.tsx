@@ -444,7 +444,7 @@ export default function BookDetailPage({ params }: BookDetailPageProps) {
 
               {/* Page Number Footer */}
               <div className="text-center pt-8 border-t border-amber-900/40 text-xs font-mono text-amber-400/80">
-                — {currentPage} —
+                · {currentPage} ·
               </div>
             </div>
           </div>

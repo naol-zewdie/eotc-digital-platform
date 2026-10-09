@@ -12,3 +12,5 @@ export * from './editorial';
 export * from './events';
 export * from './galleries';
 export * from './search';
+export * from './donations';
+export * from './moderation';
