@@ -1,9 +1,13 @@
 'use client';
 
-import React from 'react';
+import dynamic from 'next/dynamic';
 import { GridLines } from './GridLines';
 import { TextScrambler } from './TextScrambler';
-import { SacredAtmosphereCanvas } from '../SacredAtmosphereCanvas';
+
+const SacredAtmosphereCanvas = dynamic(
+  () => import('../SacredAtmosphereCanvas').then((mod) => mod.SacredAtmosphereCanvas),
+  { ssr: false }
+);
 
 interface QuoteSectionProps {
   quote?: string;

@@ -3,12 +3,17 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { GridLines } from './GridLines';
 import { KineticTitle } from './KineticTitle';
 import { DoorDennisButton } from './DoorDennisButton';
 import { VenetianMaskReveal } from './VenetianMaskReveal';
-import { Model3DViewer } from './Model3DViewer';
 import { ArrowUpRight } from 'lucide-react';
+
+const Model3DViewer = dynamic(
+  () => import('./Model3DViewer').then((mod) => mod.Model3DViewer),
+  { ssr: false }
+);
 
 interface ProjectItem {
   id: string;

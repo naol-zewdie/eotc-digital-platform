@@ -3,10 +3,15 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { Search, X } from 'lucide-react';
 import { DoorDennisButton } from './DoorDennis/DoorDennisButton';
 import { GridLines } from './DoorDennis/GridLines';
-import { Model3DViewer } from './DoorDennis/Model3DViewer';
+
+const Model3DViewer = dynamic(
+  () => import('./DoorDennis/Model3DViewer').then((mod) => mod.Model3DViewer),
+  { ssr: false }
+);
 
 interface NavbarProps {
   currentLocale?: string;

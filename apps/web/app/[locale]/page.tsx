@@ -5,14 +5,23 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 
-import { SacredAtmosphereCanvas } from '../../components/SacredAtmosphereCanvas';
+import dynamic from 'next/dynamic';
 import { GridLines } from '../../components/DoorDennis/GridLines';
 import { KineticTitle } from '../../components/DoorDennis/KineticTitle';
 import { DoorDennisButton } from '../../components/DoorDennis/DoorDennisButton';
 import { TextScrambler } from '../../components/DoorDennis/TextScrambler';
 import { VenetianMaskReveal } from '../../components/DoorDennis/VenetianMaskReveal';
 import { KeywordMarquee } from '../../components/DoorDennis/KeywordMarquee';
-import { Model3DViewer } from '../../components/DoorDennis/Model3DViewer';
+
+const SacredAtmosphereCanvas = dynamic(
+  () => import('../../components/SacredAtmosphereCanvas').then((mod) => mod.SacredAtmosphereCanvas),
+  { ssr: false }
+);
+
+const Model3DViewer = dynamic(
+  () => import('../../components/DoorDennis/Model3DViewer').then((mod) => mod.Model3DViewer),
+  { ssr: false }
+);
 import { BadgeLinkBlock } from '../../components/DoorDennis/BadgeLinkBlock';
 import { ProjectsSection } from '../../components/DoorDennis/ProjectsSection';
 import { QuoteSection } from '../../components/DoorDennis/QuoteSection';
