@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ['@eotc/contracts'],
+  transpilePackages: ['@eotc/contracts', 'three'],
   images: {
     remotePatterns: [
       {
@@ -16,12 +16,6 @@ const nextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
-  },
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.externals = [...(Array.isArray(config.externals) ? config.externals : [config.externals].filter(Boolean)), 'three'];
-    }
-    return config;
   },
 };
 
