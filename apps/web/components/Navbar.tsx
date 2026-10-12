@@ -39,7 +39,11 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale = 'am' }) => {
     },
     {
       href: `/${currentLocale}/churches`,
-      label: isGez ? 'ገዳማት' : isEn ? 'CONTACT' : 'ግንኙነት',
+      label: isGez ? 'ገዳማት' : isEn ? 'SANCTUARIES' : 'ገዳማት',
+    },
+    {
+      href: `/${currentLocale}/contact`,
+      label: isGez ? 'ተራክቦ' : isEn ? 'CONTACT' : 'ግንኙነት',
     },
   ];
 
@@ -159,103 +163,160 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale = 'am' }) => {
         </div>
       </header>
 
-      {/* Full-screen Overlay Navigation Drawer */}
+      {/* Full-screen Overlay Navigation Drawer (Matching Door Dennis #menu.menu) */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-[#F7F5F0] flex flex-col justify-between p-6 sm:p-12 overflow-y-auto">
+        <div className="fixed inset-0 z-50 bg-[#F7F5F0] flex flex-col justify-between p-6 sm:p-12 overflow-y-auto animate-fadeIn">
           {/* Top Bar of Drawer */}
           <div className="flex items-center justify-between border-b border-[#201F1E]/10 pb-6">
-            <div className="flex items-center gap-3">
+            <Link
+              href={`/${currentLocale}`}
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-3"
+            >
               <div className="w-10 h-10 rounded-xl bg-[#201F1E] text-[#F7F5F0] flex items-center justify-center font-serif text-xl font-bold">
                 ✝
               </div>
-              <span className="font-serif font-bold uppercase text-lg text-[#201F1E]">
-                {isEn ? 'EOTC Platform' : 'ተዋሕዶ ዲጂታል'}
-              </span>
-            </div>
+              <div className="flex flex-col">
+                <span className="font-serif font-bold uppercase text-base text-[#201F1E]">
+                  {isEn ? 'EOTC PATRIARCHATE' : 'የኢትዮጵያ ኦርቶዶክስ ተዋሕዶ'}
+                </span>
+                <span className="text-[10px] font-mono text-[#5C5A56] uppercase tracking-wider">
+                  {isEn ? 'DIGITAL ARCHIVE PLATFORM' : 'ብሔራዊ ዲጂታል መድረክ'}
+                </span>
+              </div>
+            </Link>
 
             <button
               onClick={() => setMobileMenuOpen(false)}
-              className="w-10 h-10 rounded-xl bg-[#201F1E] text-[#F7F5F0] flex items-center justify-center hover:bg-[#33312E] transition-colors"
+              className="w-10 h-10 rounded-xl bg-[#201F1E] text-[#F7F5F0] flex items-center justify-center hover:bg-[#33312E] transition-colors cursor-pointer"
               aria-label="Close menu"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Drawer Links */}
-          <div className="py-12 space-y-4">
-            {navItems.map((item, idx) => {
-              const isActive = item.exact
-                ? pathname === item.href
-                : pathname.startsWith(item.href);
+          {/* Door Dennis Dual-Column Menu Body */}
+          <div className="py-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+            {/* Left Col (Span 8): Large Nav Items */}
+            <div className="lg:col-span-8 space-y-3">
+              {navItems.map((item) => {
+                const isActive = item.exact
+                  ? pathname === item.href
+                  : pathname.startsWith(item.href);
 
-              return (
-                <div key={item.href} className="overflow-hidden">
-                  <Link
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`block text-3xl sm:text-5xl font-serif uppercase tracking-tight py-2 transition-colors ${
-                      isActive
-                        ? 'text-[#C89D3C]'
-                        : 'text-[#201F1E] hover:text-[#C89D3C]'
-                    }`}
-                  >
-                    <span>{item.label}</span>
-                    {item.count && (
-                      <span className="text-sm font-mono ml-3 text-[#5C5A56]">
-                        {item.count}
-                      </span>
-                    )}
-                  </Link>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Bottom Drawer Controls */}
-          <div className="pt-8 border-t border-[#201F1E]/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-            {/* Language Selection */}
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-mono uppercase text-[#5C5A56] mr-2">Language:</span>
-              <Link
-                href="/am"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`px-3 py-1.5 rounded-xl border text-xs font-mono font-bold ${
-                  currentLocale === 'am'
-                    ? 'bg-[#201F1E] text-[#F7F5F0] border-[#201F1E]'
-                    : 'border-[#201F1E]/20 text-[#201F1E]'
-                }`}
-              >
-                አማርኛ
-              </Link>
-              <Link
-                href="/gez"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`px-3 py-1.5 rounded-xl border text-xs font-mono font-bold ${
-                  currentLocale === 'gez'
-                    ? 'bg-[#201F1E] text-[#F7F5F0] border-[#201F1E]'
-                    : 'border-[#201F1E]/20 text-[#201F1E]'
-                }`}
-              >
-                ግዕዝ
-              </Link>
-              <Link
-                href="/en"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`px-3 py-1.5 rounded-xl border text-xs font-mono font-bold ${
-                  currentLocale === 'en'
-                    ? 'bg-[#201F1E] text-[#F7F5F0] border-[#201F1E]'
-                    : 'border-[#201F1E]/20 text-[#201F1E]'
-                }`}
-              >
-                English
-              </Link>
+                return (
+                  <div key={item.href} className="group">
+                    <Link
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`inline-flex items-baseline gap-4 text-3xl sm:text-5xl lg:text-6xl font-serif uppercase tracking-tight py-1.5 transition-colors ${
+                        isActive
+                          ? 'text-[#C89D3C]'
+                          : 'text-[#201F1E] group-hover:text-[#C89D3C]'
+                      }`}
+                    >
+                      <span>{item.label}</span>
+                      {item.count && (
+                        <span className="text-sm sm:text-base font-mono text-[#5C5A56] font-normal">
+                          {item.count}
+                        </span>
+                      )}
+                    </Link>
+                  </div>
+                );
+              })}
             </div>
 
-            {/* Support CTA */}
-            <DoorDennisButton href={`/${currentLocale}/donate`}>
-              {isEn ? 'Support Archives' : isGez ? 'ምጽዋተ ገዳማት' : 'ቅርሶቹን ይደግፉ'}
-            </DoorDennisButton>
+            {/* Right Col (Span 4): Door Dennis Action Card */}
+            <div className="lg:col-span-4 p-6 rounded-2xl bg-[#FAF9F6] border border-[#201F1E]/10 space-y-6">
+              <div className="space-y-2">
+                <div className="text-xs font-mono uppercase tracking-widest text-[#5C5A56]">
+                  {isEn ? 'PATRIARCHATE INITIATIVE' : 'የቅርስ ጥበቃ አደራ'}
+                </div>
+                <p className="text-sm text-[#5C5A56] leading-relaxed">
+                  {isEn
+                    ? 'Preserving ancient Ge\'ez parchments and Saint Yared\'s chant legacy freely for all generations.'
+                    : 'ጥንታዊ የብራና መጻሕፍትንና ያሬዳዊ ዜማዎችን በዘመናዊ ጥራት ለትውልድ ማቆየት የሁላችንም ቅዱስ ኃላፊነት ነው።'}
+                </p>
+              </div>
+
+              <div>
+                <DoorDennisButton
+                  href={`/${currentLocale}/donate`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#C89D3C] animate-pulse" />
+                    <span>{isEn ? 'Support Archives' : 'ቅርሶቹን ይደግፉ'}</span>
+                  </span>
+                </DoorDennisButton>
+              </div>
+
+              {/* Language Switcher in Drawer */}
+              <div className="pt-4 border-t border-[#201F1E]/10">
+                <span className="block text-xs font-mono uppercase text-[#5C5A56] mb-2.5">
+                  ቋንቋ / Language:
+                </span>
+                <div className="flex items-center gap-2">
+                  <Link
+                    href="/am"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`px-3 py-1 rounded-xl border text-xs font-mono font-bold ${
+                      currentLocale === 'am'
+                        ? 'bg-[#201F1E] text-[#F7F5F0] border-[#201F1E]'
+                        : 'border-[#201F1E]/20 text-[#201F1E]'
+                    }`}
+                  >
+                    አማርኛ
+                  </Link>
+                  <Link
+                    href="/gez"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`px-3 py-1 rounded-xl border text-xs font-mono font-bold ${
+                      currentLocale === 'gez'
+                        ? 'bg-[#201F1E] text-[#F7F5F0] border-[#201F1E]'
+                        : 'border-[#201F1E]/20 text-[#201F1E]'
+                    }`}
+                  >
+                    ግዕዝ
+                  </Link>
+                  <Link
+                    href="/en"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`px-3 py-1 rounded-xl border text-xs font-mono font-bold ${
+                      currentLocale === 'en'
+                        ? 'bg-[#201F1E] text-[#F7F5F0] border-[#201F1E]'
+                        : 'border-[#201F1E]/20 text-[#201F1E]'
+                    }`}
+                  >
+                    English
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Door Dennis Signature bottomCols */}
+          <div className="pt-8 border-t border-[#201F1E]/10 grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs font-mono">
+            <div className="flex items-center gap-4 text-[#5C5A56]">
+              <span className="hover:text-[#201F1E] cursor-pointer">Instagram</span>
+              <span>・</span>
+              <span className="hover:text-[#201F1E] cursor-pointer">YouTube / EOTC TV</span>
+              <span>・</span>
+              <span className="hover:text-[#201F1E] cursor-pointer">Telegram</span>
+            </div>
+
+            <div className="flex flex-col sm:items-end gap-1 text-[#5C5A56]">
+              <a
+                href="mailto:heritage@eotc-archive.org"
+                className="hover:text-[#C89D3C] transition-colors"
+              >
+                heritage@eotc-archive.org
+              </a>
+              <span className="text-[11px] text-[#7A7771]">
+                +251 11 123 4567 ・ Addis Ababa, Ethiopia
+              </span>
+            </div>
           </div>
         </div>
       )}

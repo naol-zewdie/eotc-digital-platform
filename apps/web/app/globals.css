@@ -502,3 +502,137 @@ body::after {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--dd-dark);
 }
+
+/* ========================================================
+   DOOR DENNIS SIGNATURE 8-COLOR DIVIDER BAR
+   ======================================================== */
+.colorDivider {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  height: 10px;
+  width: 100%;
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-top: 4.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.colorDivider .color:nth-child(1) { background: #C89D3C; } /* Sacred Gold */
+.colorDivider .color:nth-child(2) { background: #E06B4C; } /* Terracotta */
+.colorDivider .color:nth-child(3) { background: #3B7A57; } /* Deep Emerald */
+.colorDivider .color:nth-child(4) { background: #2A4D69; } /* Byzantine Blue */
+.colorDivider .color:nth-child(5) { background: #B33939; } /* Cinnabar Red */
+.colorDivider .color:nth-child(6) { background: #D98880; } /* Dusty Rose */
+.colorDivider .color:nth-child(7) { background: #7A7771; } /* Slate Stone */
+.colorDivider .color:nth-child(8) { background: #201F1E; } /* Dark Charcoal */
+
+/* ========================================================
+   DOOR DENNIS PARTNERS GRID
+   ======================================================== */
+.partnerGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.partner-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.95rem;
+  border-radius: 9999px;
+  background: rgba(250, 249, 246, 0.9);
+  border: 1px solid rgba(32, 31, 30, 0.12);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--dd-dark);
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.partner-pill:hover {
+  background: var(--dd-dark);
+  color: #F7F5F0;
+  border-color: var(--dd-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(32, 31, 30, 0.12);
+}
+
+/* ========================================================
+   CUSTOM POINTER FOLLOWER (DOOR DENNIS AESTHETIC)
+   ======================================================== */
+.custom-cursor-dot {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  background-color: var(--dd-dark);
+  border-radius: 50%;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.2s ease, width 0.25s ease, height 0.25s ease, background-color 0.25s ease;
+}
+
+.custom-cursor-ring {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid rgba(32, 31, 30, 0.28);
+  border-radius: 50%;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: width 0.22s cubic-bezier(0.16, 1, 0.3, 1), height 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, background-color 0.25s ease;
+}
+
+.custom-cursor-hover .custom-cursor-ring {
+  width: 52px;
+  height: 52px;
+  border-color: var(--dd-accent);
+  background-color: rgba(200, 157, 60, 0.08);
+}
+
+.custom-cursor-hover .custom-cursor-dot {
+  background-color: var(--dd-accent);
+  width: 5px;
+  height: 5px;
+}
+
+/* ========================================================
+   DOOR DENNIS FLOATING COOKIE & PRIVACY BANNER
+   ======================================================== */
+.dd-cookie-banner {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  max-width: 440px;
+  width: calc(100vw - 3rem);
+  background: rgba(250, 249, 246, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(32, 31, 30, 0.14);
+  border-radius: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
+  z-index: 9000;
+  animation: ddSlideUpFade 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes ddSlideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

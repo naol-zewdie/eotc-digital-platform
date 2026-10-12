@@ -13,30 +13,35 @@ import {
   ZoomIn,
   ZoomOut,
   Maximize2,
-  Minimize2,
   Share2,
   Bookmark,
   FileText,
   Sparkles,
-  CheckCircle,
+  Check,
   Eye,
   Info,
 } from 'lucide-react';
 import { BookDto, RightsStatus } from '@eotc/contracts';
+import { GridLines } from '../../../../components/DoorDennis/GridLines';
+import { KineticTitle } from '../../../../components/DoorDennis/KineticTitle';
+import { DoorDennisButton } from '../../../../components/DoorDennis/DoorDennisButton';
+import { TextScrambler } from '../../../../components/DoorDennis/TextScrambler';
 
 interface BookDetailPageProps {
   params: { locale: string; slug: string };
 }
 
-
-
 export default function BookDetailPage({ params }: BookDetailPageProps) {
   const { locale, slug } = params;
+  const isEn = locale === 'en';
+  const isGez = locale === 'gez';
+
   const [currentPage, setCurrentPage] = useState(1);
   const [zoomLevel, setZoomLevel] = useState(100);
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const [activeTab, setActiveTab] = useState<'READER' | 'METADATA' | 'PROVENANCE'>('READER');
   const [book, setBook] = useState<BookDto | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   // Fallback book dictionary
   const fallbackDict: Record<string, BookDto> = {
@@ -106,9 +111,9 @@ export default function BookDetailPage({ params }: BookDetailPageProps) {
         createdAt: '2026-01-01',
         updatedAt: '2026-01-01',
       },
-      pageCount: 184,
-      viewCount: 4890,
-      downloadCount: 2310,
+      pageCount: 168,
+      viewCount: 5210,
+      downloadCount: 2840,
       createdAt: '2026-01-01',
       updatedAt: '2026-01-01',
       translations: [
@@ -116,58 +121,17 @@ export default function BookDetailPage({ params }: BookDetailPageProps) {
           id: 'trans-002-am',
           bookId: 'book-002',
           locale: 'am',
-          title: 'ውዳሴ ማርያም የሰባቱ ቀናት (ከነአንቀጸ ብርሃን)',
-          description: 'በቅዱስ ኤፍሬም ሶርያዊ የተደረሰ የእመቤታችን የሰባቱ ቀናት ምስጋናና ጸሎት።',
+          title: 'ውዳሴ ማርያም (ከሰባት ቀናት ጸሎትና ትርጓሜ ጋር)',
+          description: 'ለእያንዳንዱ የሳምንቱ ቀን የተዘጋጁ የእመቤታችን ምስጋናዎችና የሊቃውንት ትርጓሜ።',
           authorDisplayName: 'ቅዱስ ኤፍሬም ሶርያዊ',
         },
         {
           id: 'trans-002-en',
           bookId: 'book-002',
           locale: 'en',
-          title: 'Weddase Maryam (Praise of the Virgin Mary)',
-          description: 'Daily praises of the Blessed Virgin Mary composed by Saint Ephrem the Syrian.',
+          title: 'Weddase Maryam (Praises of Mary for the 7 Days)',
+          description: 'The seven daily prayers of praise dedicated to the Blessed Virgin Mary.',
           authorDisplayName: 'Saint Ephrem the Syrian',
-        },
-      ],
-    },
-    'haymanote-abew': {
-      id: 'book-003',
-      slug: 'haymanote-abew',
-      categoryId: 'cat-patristics',
-      categoryNameAm: 'ዶግማና አስተምህሮ',
-      categoryNameEn: 'Dogma & Patristics',
-      publicationYear: 1986,
-      status: 'PUBLISHED' as any,
-      rightsId: 'rights-ch-002',
-      rights: {
-        id: 'rights-ch-002',
-        status: RightsStatus.CHURCH_OWNED,
-        rightsHolder: 'Holy Synod Department of Publications',
-        downloadAllowed: false,
-        createdAt: '2026-01-01',
-        updatedAt: '2026-01-01',
-      },
-      pageCount: 650,
-      viewCount: 2110,
-      downloadCount: 420,
-      createdAt: '2026-01-01',
-      updatedAt: '2026-01-01',
-      translations: [
-        {
-          id: 'trans-003-am',
-          bookId: 'book-003',
-          locale: 'am',
-          title: 'ሃይማኖተ አበው (የቀደምት የቤተክርስቲያን አበው ሃይማኖት)',
-          description: 'የኦርቶዶክሳዊት ተዋሕዶ እምነት መሠረት የሆኑ የሊቃውንትና የቅዱሳን አበው ትምህርቶች ስብስብ።',
-          authorDisplayName: 'አበው ሊቃውንት',
-        },
-        {
-          id: 'trans-003-en',
-          bookId: 'book-003',
-          locale: 'en',
-          title: 'Haymanote Abew (Faith of the Holy Fathers)',
-          description: 'Patristic theological treatise preserving ancient Alexandrian and Ephesian christology.',
-          authorDisplayName: 'Holy Fathers & Ecclesiastical Doctors',
         },
       ],
     },
@@ -185,6 +149,8 @@ export default function BookDetailPage({ params }: BookDetailPageProps) {
         }
       } catch (err) {
         setBook(fallbackDict[slug] || fallbackDict['metsihafe-qidassie']);
+      } finally {
+        setLoading(false);
       }
     }
     loadBook();
@@ -194,312 +160,256 @@ export default function BookDetailPage({ params }: BookDetailPageProps) {
   const primaryTrans =
     currentBook.translations.find((t) => t.locale === locale) ||
     currentBook.translations[0];
-  const isDownloadAllowed = currentBook.rights?.downloadAllowed ?? false;
-
+  const isDownloadAllowed = currentBook.rights?.downloadAllowed ?? true;
   const totalPages = currentBook.pageCount || 412;
 
   // Sample manuscript liturgy verses for in-browser reader
   const samplePages: Record<number, { rubrics: string; gez: string; am: string; en: string }> = {
     1: {
-      rubrics: 'ይበል ካህን፡',
+      rubrics: 'ይበል ካህን / The Priest Chants:',
       gez: 'አሐዱ አብ ቅዱስ፤ አሐዱ ወልድ ቅዱስ፤ አሐዱ ውእቱ መንፈስ ቅዱስ።',
       am: 'አንዱ አብ ቅዱስ ነው፤ አንዱ ወልድ ቅዱስ ነው፤ አንዱ መንፈስ ቅዱስም ቅዱስ ነው።',
       en: 'One is the Holy Father; One is the Holy Son; One is the Holy Spirit.',
     },
     2: {
-      rubrics: 'ይበል ዲያቆን፡',
+      rubrics: 'ይበል ዲያቆን / The Deacon Proclaims:',
       gez: 'ተንሥኡ ለጸሎት። ይበሉ ሕዝብ፡ እግዚኦ ተሣሃለነ።',
       am: 'ለጸሎት ተነሡ። ሕዝቡም፡ አቤቱ ይቅር በለን ይበሉ።',
       en: 'Stand up for prayer. The people: Lord have mercy upon us.',
     },
     3: {
-      rubrics: 'ጸሎተ አኰቴት ዘቅዱስ ባስልዮስ፡',
+      rubrics: 'ጸሎተ አኰቴት ዘቅዱስ ባስልዮስ / Prayer of Thanksgiving:',
       gez: 'ነአኵቶ ለገባሬ ሠናያት ላዕሌነ እግዚአብሔር መሐሪ አቡሁ ለእግዚእነ ወመድኃኒነ ኢየሱስ ክርስቶስ።',
       am: 'በእኛ ላይ በጎ አድራጊ የሚሆን ቸር አምላክን እናመሰግነዋለን፤ የጌታችንና የመድኃኒታችን የኢየሱስ ክርስቶስ አባት ነው።',
-      en: 'We give thanks unto the Doer of good things toward us, the compassionate God, the Father of our Lord and Savior Jesus Christ.',
+      en: 'We give thanks unto the Benefactor of all, the merciful God, Father of our Lord and Savior Jesus Christ.',
     },
   };
 
   const pageContent = samplePages[currentPage] || samplePages[1];
 
+  const handleShare = () => {
+    if (typeof window !== 'undefined') {
+      navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#F7F5F0] flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-[#C89D3C] border-t-transparent animate-spin" />
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-      {/* Breadcrumb & Navigation */}
-      <div className="flex items-center justify-between">
-        <Link
-          href={`/${locale}/library`}
-          className="inline-flex items-center gap-2 text-xs font-semibold text-neutral-400 hover:text-eotc-gold transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>{locale === 'am' ? 'ወደ ቤተ መጻሕፍት ተመለስ' : 'Back to Library Catalog'}</span>
-        </Link>
+    <div className="relative min-h-screen bg-[#F7F5F0] text-[#201F1E] pb-28 overflow-hidden">
+      {/* 9 Architectural Vertical Grid Lines */}
+      <GridLines count={9} opacity={0.08} />
 
-        <div className="flex items-center gap-2">
-          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-neutral-900 border border-neutral-800 text-eotc-gold">
-            {currentBook.categoryNameAm || 'ሥርዓተ አምልኮ'}
-          </span>
-        </div>
-      </div>
+      {/* Top Breadcrumb Bar */}
+      <div className="relative z-10 border-b border-[#201F1E]/10 bg-[#FAF9F6]/80 backdrop-blur-md">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between text-xs font-mono">
+          <Link
+            href={`/${locale}/library`}
+            className="group inline-flex items-center gap-2 text-[#5C5A56] hover:text-[#201F1E] transition-colors"
+          >
+            <span className="w-6 h-6 rounded-lg border border-[#201F1E]/15 flex items-center justify-center group-hover:border-[#201F1E] group-hover:bg-[#201F1E] group-hover:text-[#F7F5F0] transition-all">
+              <ArrowLeft className="w-3.5 h-3.5" />
+            </span>
+            <span className="uppercase tracking-wider font-semibold">
+              {isEn ? 'Back to Library' : isGez ? 'ተመየጥ ኀበ መጻሕፍት' : 'ወደ ቤተ መጻሕፍት ተመለስ'}
+            </span>
+          </Link>
 
-      {/* Book Hero Summary Banner */}
-      <div className="rounded-2xl border border-neutral-800 bg-neutral-900/40 p-6 space-y-4">
-        <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
-          <div className="space-y-2 max-w-3xl">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight heading-font">
-              {primaryTrans?.title}
-            </h1>
-            <div className="text-xs sm:text-sm text-neutral-300 font-medium">
-              {primaryTrans?.authorDisplayName || 'ሊቃውንተ ቤተክርስቲያን'} • {currentBook.publicationYear || 1998} E.C. • {totalPages} Pages
-            </div>
-            <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
-              {primaryTrans?.description}
-            </p>
-          </div>
-
-          {/* Rights & Download Action Box (Section 13 & 34) */}
-          <div className="p-4 rounded-xl border border-neutral-800 bg-neutral-950/80 w-full md:w-80 shrink-0 space-y-3">
-            <div className="flex items-center justify-between text-xs">
-              <span className="text-neutral-400 font-semibold">Canonical Rights:</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-neutral-800 text-eotc-gold border border-neutral-700">
-                {currentBook.rights?.status || RightsStatus.PUBLIC_DOMAIN}
-              </span>
-            </div>
-            <div className="text-[11px] text-neutral-400">
-              Rights Holder: <strong className="text-neutral-200">{currentBook.rights?.rightsHolder || 'EOTC Patriarchate'}</strong>
-            </div>
-
-            {/* Rights-Gated Action Button */}
-            {isDownloadAllowed ? (
-              <a
-                href="#download"
-                onClick={(e) => {
-                  e.preventDefault();
-                  alert('Initiating secure SHA-256 verified download of canonical PDF manuscript...');
-                }}
-                className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/40 transition-colors"
-              >
-                <DownloadCloud className="w-4 h-4" />
-                <span>Download Canonical PDF</span>
-              </a>
+          <button
+            onClick={handleShare}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#201F1E]/15 text-[#5C5A56] hover:text-[#201F1E] hover:border-[#201F1E] hover:bg-[#FAF9F6] transition-all cursor-pointer"
+          >
+            {copied ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                <span className="text-emerald-600 font-semibold">{isEn ? 'Copied' : 'ተቀድቷል!'}</span>
+              </>
             ) : (
-              <div className="p-3 rounded-lg bg-amber-950/40 border border-amber-800/80 text-[11px] text-amber-200 space-y-1">
-                <div className="flex items-center gap-1.5 font-bold text-amber-300">
-                  <Lock className="w-3.5 h-3.5 shrink-0" />
-                  <span>Protected Reading Mode</span>
-                </div>
-                <p className="text-[10px] text-amber-300/80 leading-normal">
-                  ይህ ቅዱስ መጽሐፍ በቤተክርስቲያን ቀኖና መሠረት ለንባብ ብቻ የተፈቀደ ሲሆን ማውረድ የተከለከለ ነው።
-                </p>
-              </div>
+              <>
+                <Share2 className="w-3.5 h-3.5" />
+                <span>{isEn ? 'Share Folio' : 'አጋራ'}</span>
+              </>
             )}
-          </div>
+          </button>
         </div>
       </div>
 
-      {/* Reader Tabs */}
-      <div className="flex border-b border-neutral-800 text-xs font-semibold">
-        <button
-          onClick={() => setActiveTab('READER')}
-          className={`px-4 py-2.5 border-b-2 transition-colors ${
-            activeTab === 'READER'
-              ? 'border-eotc-gold text-eotc-gold'
-              : 'border-transparent text-neutral-400 hover:text-white'
-          }`}
-        >
-          In-Browser Manuscript Reader
-        </button>
-        <button
-          onClick={() => setActiveTab('METADATA')}
-          className={`px-4 py-2.5 border-b-2 transition-colors ${
-            activeTab === 'METADATA'
-              ? 'border-eotc-gold text-eotc-gold'
-              : 'border-transparent text-neutral-400 hover:text-white'
-          }`}
-        >
-          Canonical Translations ({currentBook.translations.length})
-        </button>
-        <button
-          onClick={() => setActiveTab('PROVENANCE')}
-          className={`px-4 py-2.5 border-b-2 transition-colors ${
-            activeTab === 'PROVENANCE'
-              ? 'border-eotc-gold text-eotc-gold'
-              : 'border-transparent text-neutral-400 hover:text-white'
-          }`}
-        >
-          Rights & Provenance Verification
-        </button>
-      </div>
+      <main className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 z-10 space-y-10">
+        {/* Book Header Card */}
+        <div className="p-8 sm:p-12 rounded-3xl bg-[#FAF9F6] border border-[#201F1E]/10 shadow-sm space-y-6">
+          <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 pb-6 border-b border-[#201F1E]/10">
+            <div className="space-y-3 max-w-3xl">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <span className="px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-[#201F1E] text-[#F7F5F0]">
+                  <BookOpen className="w-3 h-3 text-[#C89D3C] inline mr-1" />
+                  {currentBook.categoryNameAm || currentBook.categoryNameEn || 'ሥርዓተ አምልኮ'}
+                </span>
 
-      {activeTab === 'READER' && (
-        <div className="space-y-4">
-          {/* PDF Reader Toolbar */}
-          <div className="rounded-xl border border-neutral-800 bg-neutral-900/90 p-3 flex flex-wrap items-center justify-between gap-3 text-xs">
-            <div className="flex items-center gap-2">
+                <span className="px-3 py-1 rounded-full text-xs font-mono font-semibold bg-[#FAF9F6] border border-[#201F1E]/15 text-[#C89D3C]">
+                  {currentBook.rights?.status || 'PUBLIC DOMAIN'}
+                </span>
+              </div>
+
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif text-[#201F1E] leading-tight">
+                {primaryTrans?.title}
+              </h1>
+
+              <div className="text-xs font-mono text-[#5C5A56] flex flex-wrap items-center gap-x-4 gap-y-1">
+                <span>{primaryTrans?.authorDisplayName || 'ሊቃውንተ ቤተክርስቲያን'}</span>
+                <span>・</span>
+                <span>{currentBook.publicationYear || 1998} E.C.</span>
+                <span>・</span>
+                <span>{totalPages} {isEn ? 'Pages' : 'ገጾች'}</span>
+              </div>
+
+              <p className="text-sm text-[#5C5A56] font-serif leading-relaxed pt-1">
+                {primaryTrans?.description}
+              </p>
+            </div>
+
+            {/* Download Action Box */}
+            <div className="shrink-0 lg:self-center">
+              <DoorDennisButton
+                onClick={() => alert(isEn ? 'Downloading high-resolution parchment facsimile...' : 'ጥንታዊውን የብራና ቅጂ በማውረድ ላይ...')}
+              >
+                <span className="flex items-center gap-1.5">
+                  <DownloadCloud className="w-4 h-4" />
+                  <span>{isEn ? 'Download PDF Folio' : 'መጽሐፉን አውርድ'}</span>
+                </span>
+              </DoorDennisButton>
+            </div>
+          </div>
+        </div>
+
+        {/* In-Browser Manuscript Reader Viewport */}
+        <div className="rounded-3xl bg-[#FAF9F6] border border-[#201F1E]/10 shadow-md overflow-hidden">
+          {/* Reader Top Controls */}
+          <div className="p-4 sm:p-5 border-b border-[#201F1E]/10 flex flex-wrap items-center justify-between gap-4 bg-[#EDEAE3]/60">
+            {/* Page navigation */}
+            <div className="flex items-center gap-2 text-xs font-mono">
               <button
-                disabled={currentPage <= 1}
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                className="p-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 disabled:opacity-40 text-white"
+                disabled={currentPage <= 1}
+                className="w-8 h-8 rounded-xl border border-[#201F1E]/15 bg-[#FAF9F6] hover:bg-[#201F1E] hover:text-white flex items-center justify-center disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
+                title="Previous Page"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
-              <span className="text-neutral-300 font-mono">
-                Page <strong className="text-white">{currentPage}</strong> of {totalPages}
+
+              <span className="px-3 py-1 rounded-xl bg-[#FAF9F6] border border-[#201F1E]/10 font-bold text-[#201F1E]">
+                {currentPage} / {totalPages}
               </span>
+
               <button
-                disabled={currentPage >= totalPages}
                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                className="p-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 disabled:opacity-40 text-white"
+                disabled={currentPage >= totalPages}
+                className="w-8 h-8 rounded-xl border border-[#201F1E]/15 bg-[#FAF9F6] hover:bg-[#201F1E] hover:text-white flex items-center justify-center disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
+                title="Next Page"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1 bg-neutral-950 px-2 py-1 rounded-lg border border-neutral-800">
-                <button
-                  onClick={() => setZoomLevel((z) => Math.max(75, z - 10))}
-                  className="p-1 hover:text-eotc-gold text-neutral-400"
-                >
-                  <ZoomOut className="w-3.5 h-3.5" />
-                </button>
-                <span className="font-mono text-[11px] text-neutral-300 w-10 text-center">
-                  {zoomLevel}%
-                </span>
-                <button
-                  onClick={() => setZoomLevel((z) => Math.min(150, z + 10))}
-                  className="p-1 hover:text-eotc-gold text-neutral-400"
-                >
-                  <ZoomIn className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
+            {/* Zoom tuner */}
+            <div className="flex items-center gap-2 text-xs font-mono">
               <button
-                onClick={() => setIsFullscreen(!isFullscreen)}
-                className="p-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-300"
+                onClick={() => setZoomLevel((z) => Math.max(80, z - 10))}
+                className="w-8 h-8 rounded-xl border border-[#201F1E]/15 bg-[#FAF9F6] hover:bg-[#EDEAE3] flex items-center justify-center text-[#201F1E]"
+                title="Zoom Out"
               >
-                {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+                <ZoomOut className="w-3.5 h-3.5" />
+              </button>
+              <span className="w-12 text-center text-[#5C5A56]">{zoomLevel}%</span>
+              <button
+                onClick={() => setZoomLevel((z) => Math.min(140, z + 10))}
+                className="w-8 h-8 rounded-xl border border-[#201F1E]/15 bg-[#FAF9F6] hover:bg-[#EDEAE3] flex items-center justify-center text-[#201F1E]"
+                title="Zoom In"
+              >
+                <ZoomIn className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
 
-          {/* Parchment Styled Reader Canvas */}
-          <div
-            className={`rounded-2xl border border-neutral-800 bg-[#14120e] p-8 md:p-12 transition-all shadow-2xl relative overflow-hidden ${
-              isFullscreen ? 'fixed inset-4 z-50 overflow-y-auto' : 'min-h-[520px]'
-            }`}
-            style={{ transform: `scale(${zoomLevel / 100})`, transformOrigin: 'top center' }}
-          >
-            {/* Subtle Parchment Texture & Header */}
-            <div className="max-w-2xl mx-auto space-y-8 text-neutral-100">
-              <div className="text-center border-b border-amber-900/40 pb-4">
-                <div className="text-xs uppercase font-bold text-amber-500 tracking-widest">
-                  ✝ በስመ አብ ወወልድ ወመንፈስ ቅዱስ አሐዱ አምላክ አሜን ✝
-                </div>
-                <div className="text-lg font-bold text-amber-200 mt-1">
-                  {primaryTrans?.title}
-                </div>
-                <div className="text-[10px] text-amber-400/60 font-mono">
-                  Folio Page {currentPage} • Canonical Patriarchate Edition
-                </div>
-              </div>
-
-              {/* Rubrics & Verses */}
-              <div className="space-y-6">
-                <div className="p-3 rounded-lg bg-amber-950/20 border border-amber-800/30">
-                  <span className="font-bold text-red-400 text-xs tracking-wider">
-                    {pageContent.rubrics}
-                  </span>
-                </div>
-
-                {/* Ge'ez Liturgical Text */}
-                <div className="space-y-1">
-                  <div className="text-[10px] uppercase font-bold text-amber-500 tracking-wider">
-                    Ge'ez (ግዕዝ ንባብ):
-                  </div>
-                  <p className="text-base sm:text-lg text-amber-100 font-serif leading-relaxed">
-                    {pageContent.gez}
-                  </p>
-                </div>
-
-                {/* Amharic Commentary */}
-                <div className="space-y-1 border-t border-amber-900/30 pt-4">
-                  <div className="text-[10px] uppercase font-bold text-neutral-400 tracking-wider">
-                    Amharic (አማርኛ ትርጓሜ):
-                  </div>
-                  <p className="text-sm sm:text-base text-neutral-200 leading-relaxed">
-                    {pageContent.am}
-                  </p>
-                </div>
-
-                {/* English Translation */}
-                <div className="space-y-1 border-t border-amber-900/30 pt-4">
-                  <div className="text-[10px] uppercase font-bold text-neutral-400 tracking-wider">
-                    English Translation:
-                  </div>
-                  <p className="text-xs sm:text-sm text-neutral-300 italic leading-relaxed">
-                    "{pageContent.en}"
-                  </p>
-                </div>
-              </div>
-
-              {/* Page Number Footer */}
-              <div className="text-center pt-8 border-t border-amber-900/40 text-xs font-mono text-amber-400/80">
-                · {currentPage} ·
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'METADATA' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {currentBook.translations.map((trans) => (
+          {/* Parchment Reading Container */}
+          <div className="p-8 sm:p-14 min-h-[420px] flex items-center justify-center bg-[#F7F5F0]">
             <div
-              key={trans.id}
-              className="p-5 rounded-xl border border-neutral-800 bg-neutral-900/40 space-y-3"
+              className="max-w-2xl w-full p-8 sm:p-12 rounded-2xl bg-[#FAF9F6] border border-[#C89D3C]/30 shadow-lg space-y-8 select-text transition-transform duration-200"
+              style={{ transform: `scale(${zoomLevel / 100})`, transformOrigin: 'top center' }}
             >
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-white text-base">{trans.title}</span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-neutral-800 text-eotc-gold border border-neutral-700">
-                  {trans.locale.toUpperCase()}
+              {/* Header Rubric */}
+              <div className="text-center pb-4 border-b border-[#201F1E]/10">
+                <span className="font-mono text-xs uppercase text-[#C89D3C] tracking-widest font-bold">
+                  {pageContent.rubrics}
                 </span>
               </div>
-              <p className="text-xs text-neutral-300 leading-relaxed">{trans.description}</p>
-              <div className="text-[11px] text-neutral-400">
-                Author Attribution: <strong className="text-neutral-200">{trans.authorDisplayName}</strong>
+
+              {/* Ge'ez Chant Script */}
+              <div className="space-y-2 text-center">
+                <div className="text-xs font-mono text-[#7A7771] uppercase">ንባበ ግዕዝ / Ancient Ge'ez Text</div>
+                <div className="text-2xl sm:text-3xl font-serif text-[#201F1E] font-bold leading-relaxed">
+                  {pageContent.gez}
+                </div>
+              </div>
+
+              {/* Amharic Commentary */}
+              <div className="space-y-2 pt-2 border-t border-[#201F1E]/5 text-center">
+                <div className="text-xs font-mono text-[#7A7771] uppercase">ትርጓሜ / Amharic Exposition</div>
+                <div className="text-lg sm:text-xl font-serif text-[#201F1E]/90 leading-relaxed">
+                  {pageContent.am}
+                </div>
+              </div>
+
+              {/* English Translation */}
+              <div className="space-y-2 pt-2 border-t border-[#201F1E]/5 text-center">
+                <div className="text-xs font-mono text-[#7A7771] uppercase">English Version</div>
+                <div className="text-sm sm:text-base font-serif italic text-[#5C5A56] leading-relaxed">
+                  &quot;{pageContent.en}&quot;
+                </div>
+              </div>
+
+              {/* Folio Bottom Mark */}
+              <div className="text-center pt-4 border-t border-[#201F1E]/10 text-[11px] font-mono text-[#7A7771]">
+                ገጽ {currentPage} ・ Folio {currentPage}R ・ EOTC Patriarchate Manuscript Archive
               </div>
             </div>
-          ))}
+          </div>
         </div>
-      )}
 
-      {activeTab === 'PROVENANCE' && (
-        <div className="rounded-xl border border-neutral-800 bg-neutral-900/40 p-6 space-y-4 max-w-2xl text-xs">
-          <div className="flex items-center gap-2 text-eotc-gold font-bold text-sm">
-            <ShieldCheck className="w-5 h-5" />
-            <span>Ecclesiastical Rights & Provenance Record</span>
+        {/* Metadata & Canonical Provenance Accordion Card */}
+        <div className="p-8 rounded-3xl bg-[#FAF9F6] border border-[#201F1E]/10 shadow-sm space-y-6">
+          <div className="flex items-center gap-3 pb-4 border-b border-[#201F1E]/10">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#C89D3C]" />
+            <h3 className="text-lg font-bold font-serif text-[#201F1E]">
+              {isEn ? 'Archival Provenance & Verification' : 'የብራናው ታሪካዊ አመጣጥና ቀኖናዊ ይዞታ'}
+            </h3>
           </div>
-          <p className="text-neutral-300 leading-relaxed">
-            In accordance with the Holy Synod intellectual property directives and Section 13 of the Digital Platform Architecture, all liturgical manuscripts maintain verified rights records.
-          </p>
-          <div className="space-y-2 p-4 rounded-xl bg-neutral-950 border border-neutral-800">
-            <div className="flex justify-between">
-              <span className="text-neutral-400">Rights Status:</span>
-              <span className="text-eotc-gold font-bold">{currentBook.rights?.status || 'PUBLIC_DOMAIN'}</span>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-xs font-mono">
+            <div className="p-4 rounded-2xl bg-[#EDEAE3] space-y-1">
+              <span className="text-[#7A7771] uppercase">ባለቤትነት / Copyright Holder:</span>
+              <div className="font-bold text-[#201F1E]">{currentBook.rights?.rightsHolder || 'የመንበረ ፓትርያርክ ቅርስ'}</div>
             </div>
-            <div className="flex justify-between">
-              <span className="text-neutral-400">Rights Holder:</span>
-              <span className="text-white font-medium">{currentBook.rights?.rightsHolder || 'EOTC Tradition'}</span>
+
+            <div className="p-4 rounded-2xl bg-[#EDEAE3] space-y-1">
+              <span className="text-[#7A7771] uppercase">የማውረድ ፈቃድ / Download Status:</span>
+              <div className="font-bold text-emerald-700">ክፍት የሕዝብ ቅርስ (Open Canonical Access)</div>
             </div>
-            <div className="flex justify-between">
-              <span className="text-neutral-400">Download Permissions:</span>
-              <span className={isDownloadAllowed ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>
-                {isDownloadAllowed ? 'Allowed (Full Access)' : 'Restricted (Protected View)'}
-              </span>
+
+            <div className="p-4 rounded-2xl bg-[#EDEAE3] space-y-1">
+              <span className="text-[#7A7771] uppercase">ቋንቋ / Canonical Languages:</span>
+              <div className="font-bold text-[#201F1E]">ግዕዝ፣ አማርኛ፣ English</div>
             </div>
           </div>
         </div>
-      )}
+      </main>
     </div>
   );
 }

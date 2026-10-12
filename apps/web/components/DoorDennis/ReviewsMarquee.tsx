@@ -10,41 +10,78 @@ interface ReviewItem {
   stars: number;
 }
 
-const REVIEWS: ReviewItem[] = [
-  {
-    id: '1',
-    name: 'መጋቤ ሐዲስ እሸቱ',
-    role: 'የሊቃውንት ጉባኤ አባል',
-    quote: 'ይህ የዲጂታል መድረክ ጥንታውያኑን የብራና መጻሕፍት ለትውልድ ሳያዛንፍ ለማስተላለፍ የተሠራ ታላቅ ታሪካዊ ሥራ ነው።',
-    stars: 5,
-  },
-  {
-    id: '2',
-    name: 'አባ ገብረ ሥላሴ',
-    role: 'የደብረ ዳሞ ገዳም አበምኔት',
-    quote: 'የገዳማችንን ጥንታዊ ቅርሶች ዓለም እንዲያውቃቸውና ተጠብቀው እንዲቆዩ ትልቅ ዕድል ከፍቷል።',
-    stars: 5,
-  },
-  {
-    id: '3',
-    name: 'ዶ/ር ያሬድ ገብረ መድኅን',
-    role: 'የግዕዝ ሥነ-ጽሑፍ ተመራማሪ',
-    quote: 'የማኑስክሪፕት ጥናትን በዲጂታል ጥራት ለማግኘት ወደር የሌለው ዘመናዊና የተሟላ ቤተ መዛግብት ነው።',
-    stars: 5,
-  },
-  {
-    id: '4',
-    name: 'ዲያቆን ዮሐንስ',
-    role: 'የቅድስት ሥላሴ ዩኒቨርሲቲ ተማሪ',
-    quote: 'ያሬዳዊ ዜማዎችን በስርዓታቸውና በድምፃቸው ለማጥናት እጅግ በጣም ጠቃሚ የሆነ መንፈሳዊ ድጋፍ ነው።',
-    stars: 5,
-  },
-];
+interface ReviewsMarqueeProps {
+  locale?: string;
+}
 
-export const ReviewsMarquee: React.FC = () => {
+export const ReviewsMarquee: React.FC<ReviewsMarqueeProps> = ({ locale = 'am' }) => {
+  const isEn = locale === 'en';
+
+  const reviews: ReviewItem[] = isEn
+    ? [
+        {
+          id: '1',
+          name: 'Megabe Hadis Eshetu',
+          role: 'Member of the Ecclesiastical Council',
+          quote: 'This digital platform is a historic achievement, ensuring ancient parchment manuscripts are preserved without distortion for posterity.',
+          stars: 5,
+        },
+        {
+          id: '2',
+          name: 'Abba Gebre Selassie',
+          role: 'Abbot, Debre Damo Monastery',
+          quote: 'It offers the world an open window to our ancient heritage while safeguarding our remote mountaintop monastic treasures.',
+          stars: 5,
+        },
+        {
+          id: '3',
+          name: 'Dr. Yared Gebremedhin',
+          role: 'Ge\'ez Philology & Archival Scholar',
+          quote: 'An unparalleled digital repository offering high-fidelity manuscript folios for international patristic research.',
+          stars: 5,
+        },
+        {
+          id: '4',
+          name: 'Deacon Yohannes',
+          role: 'Holy Trinity Theological University',
+          quote: 'An invaluable ecclesiastical resource for learning Saint Yared\'s musical modes and authentic liturgical rubrics.',
+          stars: 5,
+        },
+      ]
+    : [
+        {
+          id: '1',
+          name: 'መጋቤ ሐዲስ እሸቱ',
+          role: 'የሊቃውንት ጉባኤ አባል',
+          quote: 'ይህ የዲጂታል መድረክ ጥንታውያኑን የብራና መጻሕፍት ለትውልድ ሳያዛንፍ ለማስተላለፍ የተሠራ ታላቅ ታሪካዊ ሥራ ነው።',
+          stars: 5,
+        },
+        {
+          id: '2',
+          name: 'አባ ገብረ ሥላሴ',
+          role: 'የደብረ ዳሞ ገዳም አበምኔት',
+          quote: 'የገዳማችንን ጥንታዊ ቅርሶች ዓለም እንዲያውቃቸውና ተጠብቀው እንዲቆዩ ትልቅ ዕድል ከፍቷል።',
+          stars: 5,
+        },
+        {
+          id: '3',
+          name: 'ዶ/ር ያሬድ ገብረ መድኅን',
+          role: 'የግዕዝ ሥነ-ጽሑፍ ተመራማሪ',
+          quote: 'የማኑስክሪፕት ጥናትን በዲጂታል ጥራት ለማግኘት ወደር የሌለው ዘመናዊና የተሟላ ቤተ መዛግብት ነው።',
+          stars: 5,
+        },
+        {
+          id: '4',
+          name: 'ዲያቆን ዮሐንስ',
+          role: 'የቅድስት ሥላሴ ዩኒቨርሲቲ ተማሪ',
+          quote: 'ያሬዳዊ ዜማዎችን በስርዓታቸውና በድምፃቸው ለማጥናት እጅግ በጣም ጠቃሚ የሆነ መንፈሳዊ ድጋፍ ነው።',
+          stars: 5,
+        },
+      ];
+
   const renderCards = (keyPrefix: string) => (
     <div className="flex items-center gap-6 shrink-0 marquee-track-left" style={{ animationDuration: '45s' }}>
-      {REVIEWS.map((rev) => (
+      {reviews.map((rev) => (
         <div
           key={`${keyPrefix}-${rev.id}`}
           className="w-[320px] sm:w-[380px] p-6 rounded-2xl bg-[#FAF9F6] border border-[#201F1E]/10 shadow-sm shrink-0 flex flex-col justify-between"
@@ -72,7 +109,7 @@ export const ReviewsMarquee: React.FC = () => {
   );
 
   return (
-    <div className="relative w-full overflow-hidden py-12 select-none">
+    <div className="relative w-full overflow-hidden py-10 select-none">
       <div className="marquee-container flex gap-6">
         {renderCards('set-1')}
         {renderCards('set-2')}

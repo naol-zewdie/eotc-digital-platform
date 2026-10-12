@@ -8,7 +8,9 @@
     "apps/*"
   ],
   "scripts": {
-    "build": "npm run --workspaces --if-present build",
+    "build": "npm run build:web",
+    "build:web": "npm --workspace=@eotc/contracts run build && npm --workspace=@eotc/web run build",
+    "build:all": "npm run --workspaces --if-present build",
     "lint": "npm run --workspaces --if-present lint",
     "test": "npm run --workspaces --if-present test",
     "dev:api": "npm --workspace=apps/api run dev",

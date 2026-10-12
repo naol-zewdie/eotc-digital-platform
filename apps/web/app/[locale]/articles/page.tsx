@@ -159,18 +159,18 @@ export default function ArticlesPage({ params }: ArticlesPageProps) {
   });
 
   return (
-    <div className="relative min-h-screen py-16 sm:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden bg-[#F0F0F0]">
+    <div className="relative min-h-screen py-16 sm:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden bg-[#F7F5F0] text-[#201F1E]">
       {/* 9 Architectural Lines */}
-      <GridLines count={9} opacity={0.07} />
+      <GridLines count={9} opacity={0.08} />
 
       <div className="relative max-w-7xl mx-auto z-10 space-y-12">
         {/* Header */}
-        <div className="border-b border-neutral-300/70 pb-10 space-y-4">
-          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-neutral-500">
-            <Newspaper className="w-4 h-4 text-neutral-800" />
+        <div className="border-b border-[#201F1E]/10 pb-10 space-y-4">
+          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#5C5A56]">
+            <Newspaper className="w-4 h-4 text-[#C89D3C]" />
             <span>{isEn ? 'Patriarchate Publications' : 'ትምህርተ ሃይማኖትና ዜና'}</span>
             <span>・</span>
-            <span className="text-neutral-400">{filteredArticles.length} Published</span>
+            <span className="text-[#7A7771]">{filteredArticles.length} Published</span>
           </div>
 
           <KineticTitle
@@ -178,10 +178,10 @@ export default function ArticlesPage({ params }: ArticlesPageProps) {
             italicWord={isEn ? 'Apostolic Teaching' : 'ትምህርተ ሃይማኖት'}
             afterText=""
             as="h1"
-            className="text-4xl sm:text-5xl lg:text-6xl text-neutral-900"
+            className="text-4xl sm:text-5xl lg:text-6xl text-[#201F1E]"
           />
 
-          <p className="text-base text-neutral-600 max-w-2xl leading-relaxed">
+          <p className="text-base text-[#5C5A56] max-w-2xl leading-relaxed">
             {isEn
               ? 'Authorized communiques from the Holy Synod, Christological treatises, patristic homilies, and ecclesiastical historical essays.'
               : 'የቅዱስ ሲኖዶስ ሐዋርያዊ መግለጫዎች፣ የነገረ መለኮት ሊቃውንት ትምህርቶች፣ የቤተክርስቲያን ታሪክና የዶግማ ማብራሪያዎች።'}
@@ -195,10 +195,10 @@ export default function ArticlesPage({ params }: ArticlesPageProps) {
               <button
                 key={t.id}
                 onClick={() => setSelectedType(t.id)}
-                className={`px-4 py-2 rounded-full text-xs font-medium transition-all ${
+                className={`px-4 py-2 rounded-2xl text-xs font-mono font-medium transition-all cursor-pointer border ${
                   selectedType === t.id
-                    ? 'bg-neutral-900 text-white shadow-sm'
-                    : 'bg-white/80 border border-neutral-300/70 text-neutral-700 hover:bg-neutral-200'
+                    ? 'bg-[#201F1E] text-[#F7F5F0] border-[#201F1E] shadow-sm'
+                    : 'bg-[#FAF9F6] border-[#201F1E]/15 text-[#5C5A56] hover:border-[#201F1E] hover:text-[#201F1E]'
                 }`}
               >
                 {t.label}
@@ -207,13 +207,13 @@ export default function ArticlesPage({ params }: ArticlesPageProps) {
           </div>
 
           <div className="relative w-full md:w-80">
-            <Search className="w-4 h-4 absolute left-3.5 top-3 text-neutral-400" />
+            <Search className="w-4 h-4 absolute left-3.5 top-3 text-[#7A7771]" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={isEn ? 'Search articles or authors...' : 'ጽሑፎችን ፈልግ...'}
-              className="w-full pl-10 pr-4 py-2 rounded-full border border-neutral-300/80 bg-white/90 text-neutral-900 placeholder:text-neutral-400 text-xs focus:outline-none focus:border-neutral-900"
+              className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-[#201F1E]/15 bg-[#FAF9F6] text-[#201F1E] placeholder:text-[#7A7771] text-xs font-mono focus:outline-none focus:border-[#C89D3C]"
             />
           </div>
         </div>
@@ -228,11 +228,11 @@ export default function ArticlesPage({ params }: ArticlesPageProps) {
             return (
               <div
                 key={article.id}
-                className="dd-project-card p-6 flex flex-col justify-between bg-white border border-neutral-200/90 shadow-sm hover:shadow-md transition-all group"
+                className="p-7 rounded-3xl flex flex-col justify-between bg-[#FAF9F6] border border-[#201F1E]/10 shadow-sm hover:shadow-lg hover:border-[#201F1E]/30 transition-all duration-300 group"
               >
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between text-[11px] font-mono text-neutral-400">
-                    <span className="uppercase tracking-wider">
+                  <div className="flex items-center justify-between text-[11px] font-mono text-[#5C5A56]">
+                    <span className="uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#EDEAE3] font-semibold text-[#201F1E]">
                       {article.type}
                     </span>
                     <span className="flex items-center gap-1 text-neutral-500">

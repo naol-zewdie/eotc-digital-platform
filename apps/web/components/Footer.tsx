@@ -29,7 +29,7 @@ export const Footer: React.FC<FooterProps> = ({ currentLocale = 'am' }) => {
               {isEn ? 'Patriarchate Blessings & Testimonies' : 'የሊቃውንት ምስክርነትና ቡራኬ'}
             </span>
           </div>
-          <ReviewsMarquee />
+          <ReviewsMarquee locale={currentLocale} />
         </div>
 
         {/* Big Impactful Call To Action Section (Matching Door Dennis footer huge title) */}
@@ -105,6 +105,11 @@ export const Footer: React.FC<FooterProps> = ({ currentLocale = 'am' }) => {
               <li>
                 <Link href={`/${currentLocale}/donate`} className="hover:text-[#C89D3C] transition-colors">
                   {isEn ? 'Heritage Conservation Fund' : 'የቅርስ ጥበቃ ፈንድ'}
+                </Link>
+              </li>
+              <li>
+                <Link href={`/${currentLocale}/contact`} className="hover:text-[#C89D3C] transition-colors">
+                  {isEn ? 'Direct Contact & Inquiries' : 'ቀጥታ ግንኙነት'}
                 </Link>
               </li>
             </ul>

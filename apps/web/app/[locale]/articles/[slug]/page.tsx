@@ -3,17 +3,20 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
-  Newspaper,
-  Calendar,
-  User,
-  Share2,
   ArrowLeft,
-  ShieldCheck,
-  BookOpen,
+  Share2,
+  Calendar,
   Clock,
-  Sparkles,
+  ShieldCheck,
+  User,
+  Check,
+  BookOpen,
 } from 'lucide-react';
 import { ArticleDto, ArticleType } from '@eotc/contracts';
+import { GridLines } from '../../../../components/DoorDennis/GridLines';
+import { KineticTitle } from '../../../../components/DoorDennis/KineticTitle';
+import { DoorDennisButton } from '../../../../components/DoorDennis/DoorDennisButton';
+import { TextScrambler } from '../../../../components/DoorDennis/TextScrambler';
 
 interface ArticleDetailPageProps {
   params: { locale: string; slug: string };
@@ -22,6 +25,8 @@ interface ArticleDetailPageProps {
 export default function ArticleDetailPage({ params }: ArticleDetailPageProps) {
   const locale = params.locale || 'am';
   const slug = params.slug;
+  const isEn = locale === 'en';
+  const isGez = locale === 'gez';
 
   const [article, setArticle] = useState<ArticleDto | null>(null);
   const [loading, setLoading] = useState(true);
@@ -99,7 +104,6 @@ Glory be to God the Father, to His Virgin Mother, and to the Precious Cross.`,
           setArticle(fallbackArticle);
         }
       } catch (err) {
-        console.warn('Fallback to demo article:', err);
         setArticle(fallbackArticle);
       } finally {
         setLoading(false);
@@ -123,8 +127,8 @@ Glory be to God the Father, to His Virgin Mother, and to the Precious Cross.`,
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0C0B0A] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#D4AF37]" />
+      <div className="min-h-screen bg-[#F7F5F0] flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-[#C89D3C] border-t-transparent animate-spin" />
       </div>
     );
   }
@@ -138,107 +142,126 @@ Glory be to God the Father, to His Virgin Mother, and to the Precious Cross.`,
     : '2026';
 
   return (
-    <div className="min-h-screen bg-[#0C0B0A] text-neutral-100 pb-24">
-      {/* Top Breadcrumb */}
-      <div className="border-b border-[#24201A] bg-[#14120F]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between text-xs text-neutral-400">
+    <div className="relative min-h-screen bg-[#F7F5F0] text-[#201F1E] pb-28 overflow-hidden">
+      {/* 9 Architectural Vertical Grid Lines */}
+      <GridLines count={9} opacity={0.08} />
+
+      {/* Top Breadcrumb Navigation */}
+      <div className="relative z-10 border-b border-[#201F1E]/10 bg-[#FAF9F6]/80 backdrop-blur-md">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between text-xs font-mono">
           <Link
             href={`/${locale}/articles`}
-            className="hover:text-[#D4AF37] flex items-center gap-1.5 transition-colors"
+            className="group inline-flex items-center gap-2 text-[#5C5A56] hover:text-[#201F1E] transition-colors"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>{locale === 'am' ? 'ወደ ጽሑፎች ዝርዝር ተመለስ' : 'Back to Articles'}</span>
+            <span className="w-6 h-6 rounded-lg border border-[#201F1E]/15 flex items-center justify-center group-hover:border-[#201F1E] group-hover:bg-[#201F1E] group-hover:text-[#F7F5F0] transition-all">
+              <ArrowLeft className="w-3.5 h-3.5" />
+            </span>
+            <span className="uppercase tracking-wider font-semibold">
+              {isEn ? 'Back to Treatises' : isGez ? 'ተመየጥ ኀበ ድርሳናት' : 'ወደ ጽሑፎች ዝርዝር ተመለስ'}
+            </span>
           </Link>
 
           <button
             onClick={handleShare}
-            className="flex items-center gap-1.5 hover:text-white transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#201F1E]/15 text-[#5C5A56] hover:text-[#201F1E] hover:border-[#201F1E] hover:bg-[#FAF9F6] transition-all cursor-pointer"
           >
-            <Share2 className="w-3.5 h-3.5" />
-            <span>{copied ? (locale === 'am' ? 'ተቀድቷል!' : 'Copied!') : locale === 'am' ? 'አጋራ' : 'Share'}</span>
+            {copied ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                <span className="text-emerald-600 font-semibold">{isEn ? 'Copied Link' : 'ተቀድቷል!'}</span>
+              </>
+            ) : (
+              <>
+                <Share2 className="w-3.5 h-3.5" />
+                <span>{isEn ? 'Share Article' : 'አጋራ'}</span>
+              </>
+            )}
           </button>
         </div>
       </div>
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
-        {/* Article Header Card */}
-        <header className="mb-10 pb-8 border-b border-[#2A241C]">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="text-xs font-semibold px-3 py-1 rounded-md bg-[#881337] text-white">
+      <main className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 z-10">
+        {/* Header Block matching Door Dennis Typography */}
+        <header className="space-y-6 pb-10 border-b border-[#201F1E]/10">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <span className="px-3 py-1 rounded-full text-xs font-mono font-bold tracking-wider uppercase bg-[#201F1E] text-[#F7F5F0] shadow-sm">
               {activeArticle.type === ArticleType.NEWS
-                ? locale === 'am'
-                  ? 'የቅዱስ ሲኖዶስ ዜናና መግለጫ'
-                  : 'Synod News & Communiqué'
-                : locale === 'am'
-                ? 'ሥነ መለኮታዊ ትምህርት'
-                : 'Theological Treatise'}
+                ? isEn
+                  ? 'Synod Communiqué'
+                  : 'የቅዱስ ሲኖዶስ መግለጫ'
+                : isEn
+                ? 'Theological Treatise'
+                : 'ሥነ መለኮታዊ ትምህርት'}
             </span>
-            <span className="inline-flex items-center gap-1 text-xs text-emerald-400 bg-emerald-950/40 px-2.5 py-0.5 rounded-md border border-emerald-800/40">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              {locale === 'am' ? 'ቀኖናዊ ጽሑፍ' : 'Canonical'}
+
+            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-[#FAF9F6] border border-[#201F1E]/15 text-[#C89D3C]">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#C89D3C]" />
+              <span>{isEn ? 'Canonical Seal' : 'ቀኖናዊ ጽሑፍ'}</span>
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif text-[#201F1E] leading-[1.12] tracking-tight">
             {translation?.title}
           </h1>
 
-          <div className="flex flex-wrap items-center gap-y-2 gap-x-6 text-xs text-neutral-400">
+          {/* Meta Info Bar */}
+          <div className="flex flex-wrap items-center gap-y-2 gap-x-6 text-xs font-mono text-[#5C5A56] pt-2">
             <div className="flex items-center gap-2">
-              <User className="w-4 h-4 text-[#D4AF37]" />
-              <span className="font-semibold text-neutral-200">
-                {activeArticle.authorName || 'EOTC Patriarchate Secretariat'}
+              <User className="w-3.5 h-3.5 text-[#C89D3C]" />
+              <span className="font-semibold text-[#201F1E]">
+                {activeArticle.authorName || (isEn ? 'EOTC Patriarchate Secretariat' : 'የቅዱስ ሲኖዶስ ዋና ጽ/ቤት')}
               </span>
             </div>
 
             <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-neutral-500" />
+              <Calendar className="w-3.5 h-3.5 text-[#7A7771]" />
               <span>{dateStr}</span>
             </div>
 
             <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-neutral-500" />
-              <span>{locale === 'am' ? 'የንባብ ጊዜ፦ 5 ደቂቃ' : '5 min read'}</span>
+              <Clock className="w-3.5 h-3.5 text-[#7A7771]" />
+              <span>{isEn ? '5 min read' : 'የንባብ ጊዜ፦ 5 ደቂቃ'}</span>
             </div>
           </div>
         </header>
 
-        {/* Lead Summary */}
+        {/* Lead Summary Block */}
         {translation?.summary && (
-          <div className="p-5 rounded-2xl bg-[#16130F] border-l-4 border-[#D4AF37] border-y border-r border-[#262118] text-sm sm:text-base text-neutral-200 leading-relaxed font-serif mb-8 italic">
-            &quot;{translation.summary}&quot;
+          <div className="my-10 p-6 sm:p-8 rounded-2xl bg-[#FAF9F6] border-l-4 border-[#C89D3C] border-y border-r border-[#201F1E]/10 shadow-sm">
+            <p className="text-base sm:text-lg text-[#201F1E] font-serif italic leading-relaxed">
+              &quot;{translation.summary}&quot;
+            </p>
           </div>
         )}
 
-        {/* Main Body */}
-        <article className="prose prose-invert max-w-none text-neutral-200 font-serif leading-loose text-base sm:text-lg space-y-6">
-          <div className="whitespace-pre-line select-text">
+        {/* Article Body */}
+        <article className="prose prose-neutral max-w-none text-[#201F1E] font-serif leading-loose text-base sm:text-lg space-y-8 select-text">
+          <div className="whitespace-pre-line">
             {translation?.contentMarkdown}
           </div>
         </article>
 
-        {/* Canonical Seal Footer */}
-        <div className="mt-14 pt-8 border-t border-[#262118] flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-[#13110E] border border-[#262118]">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#881337] to-[#50071C] flex items-center justify-center text-[#D4AF37] border border-[#D4AF37]/30 text-xl font-bold">
-              ✝
-            </div>
-            <div>
-              <div className="text-sm font-bold text-white">
-                {locale === 'am' ? 'የኢትዮጵያ ኦርቶዶክስ ተዋሕዶ ቤተክርስቲያን' : 'Ethiopian Orthodox Tewahedo Church'}
+        {/* Door Dennis Canonical Seal & Patriarchate Attribution Card */}
+        <div className="mt-16 pt-8 border-t border-[#201F1E]/10">
+          <div className="p-6 sm:p-8 rounded-3xl bg-[#FAF9F6] border border-[#201F1E]/10 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-sm">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-[#201F1E] text-[#F7F5F0] flex items-center justify-center font-serif text-xl font-bold shrink-0 shadow-sm">
+                ✝
               </div>
-              <div className="text-xs text-neutral-400">
-                {locale === 'am' ? 'መንበረ ፓትርያርክ ጠቅላይ ቤተ ክህነት' : 'Patriarchate Supreme Secretariat'}
+              <div className="space-y-0.5">
+                <div className="text-sm sm:text-base font-bold font-serif uppercase tracking-tight text-[#201F1E]">
+                  {isEn ? 'Ethiopian Orthodox Tewahedo Church' : 'የኢትዮጵያ ኦርቶዶክስ ተዋሕዶ ቤተክርስቲያን'}
+                </div>
+                <div className="text-xs font-mono text-[#5C5A56]">
+                  {isEn ? 'Patriarchate Supreme Secretariat' : 'መንበረ ፓትርያርክ ጠቅላይ ቤተ ክህነት'}
+                </div>
               </div>
             </div>
-          </div>
 
-          <Link
-            href={`/${locale}/articles`}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-[#221D17] hover:bg-[#2E2820] text-neutral-200 transition-colors self-start sm:self-auto"
-          >
-            <span>{locale === 'am' ? 'ተጨማሪ ጽሑፎችን አንብብ' : 'More Articles'}</span>
-          </Link>
+            <DoorDennisButton href={`/${locale}/articles`}>
+              {isEn ? 'More Treatises' : 'ተጨማሪ ጽሑፎች'}
+            </DoorDennisButton>
+          </div>
         </div>
       </main>
     </div>

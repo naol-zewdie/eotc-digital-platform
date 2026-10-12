@@ -212,7 +212,7 @@ export default function LibraryPage({ params }: LibraryPageProps) {
   });
 
   return (
-    <div className="relative min-h-screen py-16 sm:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden bg-[#F0F0F0]">
+    <div className="relative min-h-screen py-16 sm:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden bg-[#F7F5F0]">
       {/* 9 Architectural Lines */}
       <GridLines count={9} opacity={0.07} />
 

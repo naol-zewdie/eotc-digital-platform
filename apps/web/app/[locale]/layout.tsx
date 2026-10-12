@@ -1,6 +1,8 @@
 import React from 'react';
 import { Navbar } from '../../components/Navbar';
 import { Footer } from '../../components/Footer';
+import { CustomCursor } from '../../components/DoorDennis/CustomCursor';
+import { CookiePopup } from '../../components/DoorDennis/CookiePopup';
 
 export function generateStaticParams() {
   return [{ locale: 'am' }, { locale: 'gez' }, { locale: 'en' }];
@@ -17,6 +19,9 @@ export default function LocaleLayout({
 
   return (
     <div className="relative flex flex-col min-h-screen bg-[#F7F5F0] text-[#201F1E] selection:bg-[#C89D3C] selection:text-[#F7F5F0]">
+      {/* Custom Tactile Pointer Follower */}
+      <CustomCursor />
+
       {/* 9 Architectural Continuous Vertical Grid Lines (Exact Door Dennis Structure) */}
       <div
         aria-hidden="true"
@@ -33,6 +38,9 @@ export default function LocaleLayout({
       <Navbar currentLocale={currentLocale} />
       <main className="flex-1 relative z-10">{children}</main>
       <Footer currentLocale={currentLocale} />
+
+      {/* Floating Door Dennis Cookie & Privacy Notification */}
+      <CookiePopup locale={currentLocale} />
     </div>
   );
 }
