@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { Search, X } from 'lucide-react';
 import { DoorDennisButton } from './DoorDennis/DoorDennisButton';
 import { GridLines } from './DoorDennis/GridLines';
+import { Model3DViewer } from './DoorDennis/Model3DViewer';
 
 interface NavbarProps {
   currentLocale?: string;
@@ -61,8 +62,19 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLocale = 'am' }) => {
               className="flex items-center gap-3 group text-[#201F1E]"
               title="Ethiopian Orthodox Tewahedo Church"
             >
-              <div className="w-10 h-10 rounded-xl bg-[#201F1E] text-[#F7F5F0] flex items-center justify-center font-serif text-xl font-bold group-hover:scale-105 transition-transform shadow-sm">
-                ✝
+              <div className="relative w-11 h-11 rounded-xl bg-[#201F1E] text-[#F7F5F0] overflow-hidden flex items-center justify-center font-serif text-xl font-bold group-hover:scale-105 transition-transform shadow-sm border border-[#201F1E]/20">
+                <div className="absolute inset-0 w-full h-full pointer-events-none">
+                  <Model3DViewer
+                    modelUrl="/hl._joachim.glb"
+                    className="w-full h-full"
+                    autoRotateSpeed={0.015}
+                    scaleMultiplier={1.4}
+                    interactive={false}
+                    cameraDistance={2.6}
+                    showShadows={false}
+                    ambientIntensity={2.0}
+                  />
+                </div>
               </div>
               <div className="flex flex-col">
                 <span className="font-extrabold tracking-tight text-sm sm:text-base font-serif uppercase text-[#201F1E]">

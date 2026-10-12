@@ -12,6 +12,7 @@ import { DoorDennisButton } from '../../components/DoorDennis/DoorDennisButton';
 import { TextScrambler } from '../../components/DoorDennis/TextScrambler';
 import { VenetianMaskReveal } from '../../components/DoorDennis/VenetianMaskReveal';
 import { KeywordMarquee } from '../../components/DoorDennis/KeywordMarquee';
+import { Model3DViewer } from '../../components/DoorDennis/Model3DViewer';
 import { BadgeLinkBlock } from '../../components/DoorDennis/BadgeLinkBlock';
 import { ProjectsSection } from '../../components/DoorDennis/ProjectsSection';
 import { QuoteSection } from '../../components/DoorDennis/QuoteSection';
@@ -174,21 +175,20 @@ export default function HomePage({ params }: HomePageProps) {
 
           {/* Bottom Dual Columns from Door Dennis */}
           <div className="pt-8 sm:pt-14 border-t border-[#201F1E]/10 grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
-            {/* Left Column: Ecclesiastical Shutter Image + Live Availability Status */}
+            {/* Left Column: 3D Rotating Joachim Emblem + Live Availability Status */}
             <div className="flex items-center gap-5">
-              <VenetianMaskReveal
-                linesCount={16}
-                delayMs={200}
-                className="w-16 h-16 sm:w-20 sm:h-20 shrink-0 overflow-hidden rounded-2xl bg-[#EDEAE3] border border-[#201F1E]/10 shadow-sm"
-              >
-                <Image
-                  src="/cross.png"
-                  alt="Processional Cross"
-                  width={80}
-                  height={80}
-                  className="w-full h-full object-cover"
+              <div className="w-16 h-16 sm:w-20 sm:h-20 shrink-0 overflow-hidden rounded-2xl bg-[#FAF9F6] border border-[#201F1E]/10 shadow-sm relative group cursor-grab">
+                <Model3DViewer
+                  modelUrl="/hl._joachim.glb"
+                  className="w-full h-full"
+                  autoRotateSpeed={0.012}
+                  scaleMultiplier={1.3}
+                  interactive={true}
+                  cameraDistance={2.5}
+                  showShadows={false}
+                  ambientIntensity={1.8}
                 />
-              </VenetianMaskReveal>
+              </div>
 
               <div className="space-y-1">
                 <div className="availability-pill">

@@ -7,6 +7,7 @@ import { GridLines } from './GridLines';
 import { KineticTitle } from './KineticTitle';
 import { DoorDennisButton } from './DoorDennisButton';
 import { VenetianMaskReveal } from './VenetianMaskReveal';
+import { Model3DViewer } from './Model3DViewer';
 import { ArrowUpRight } from 'lucide-react';
 
 interface ProjectItem {
@@ -110,73 +111,19 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
             - Column 2 to 4 (or 1 to 3): Project 3 (Manuscripts & Cross, Identical Size!)
             ======================================================== */}
         <div className="relative mt-16 sm:mt-24">
-          {/* Center 3D Watermark Insignia floating behind cards */}
+          {/* Center 3D Interactive Rotating Model in middle gap matching doordennis.nl */}
           <div
             aria-hidden="true"
-            className="absolute left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 w-[320px] sm:w-[460px] lg:w-[560px] pointer-events-none select-none z-0 opacity-[0.14] transition-transform duration-700 hover:scale-105"
+            className="hidden md:block absolute left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 w-[340px] h-[340px] lg:w-[460px] lg:h-[460px] xl:w-[540px] xl:h-[540px] pointer-events-auto select-none z-10 transition-transform duration-700 hover:scale-105"
           >
-            <svg
-              viewBox="0 0 400 400"
-              className="w-full h-full drop-shadow-[0_12px_24px_rgba(0,0,0,0.08)]"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <defs>
-                <filter id="embossFilter" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur" />
-                  <feSpecularLighting
-                    in="blur"
-                    surfaceScale="5"
-                    specularConstant="0.9"
-                    specularExponent="20"
-                    lightingColor="#FFFFFF"
-                    result="specOut"
-                  >
-                    <fePointLight x="-500" y="-1000" z="600" />
-                  </feSpecularLighting>
-                  <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2" />
-                  <feComposite
-                    in="SourceGraphic"
-                    in2="specOut2"
-                    operator="arithmetic"
-                    k1="0"
-                    k2="1"
-                    k3="1"
-                    k4="0"
-                    result="litGraphic"
-                  />
-                </filter>
-              </defs>
-
-              <g filter="url(#embossFilter)">
-                {/* Central Cross Pillar */}
-                <rect x="180" y="20" width="40" height="360" rx="8" fill="#201F1E" />
-                <rect x="20" y="140" width="360" height="40" rx="8" fill="#201F1E" />
-
-                {/* Concentric Decorative Cross Rings */}
-                <circle cx="200" cy="160" r="70" stroke="#201F1E" strokeWidth="18" fill="none" />
-                <circle cx="200" cy="160" r="110" stroke="#201F1E" strokeWidth="10" strokeDasharray="14 10" fill="none" />
-
-                {/* Orthodox Trefoil Cross Finials */}
-                <circle cx="200" cy="20" r="24" fill="#201F1E" />
-                <circle cx="170" cy="28" r="16" fill="#201F1E" />
-                <circle cx="230" cy="28" r="16" fill="#201F1E" />
-
-                <circle cx="20" cy="160" r="24" fill="#201F1E" />
-                <circle cx="28" cy="130" r="16" fill="#201F1E" />
-                <circle cx="28" cy="190" r="16" fill="#201F1E" />
-
-                <circle cx="380" cy="160" r="24" fill="#201F1E" />
-                <circle cx="372" cy="130" r="16" fill="#201F1E" />
-                <circle cx="372" cy="190" r="16" fill="#201F1E" />
-
-                <circle cx="200" cy="380" r="24" fill="#201F1E" />
-                <circle cx="170" cy="372" r="16" fill="#201F1E" />
-                <circle cx="230" cy="372" r="16" fill="#201F1E" />
-
-                <path d="M190 145 H210 V175 H190 Z" fill="#F7F5F0" />
-              </g>
-            </svg>
+            <Model3DViewer
+              modelUrl="/hl._joachim.glb"
+              className="w-full h-full"
+              autoRotateSpeed={0.007}
+              scaleMultiplier={1.15}
+              cameraDistance={2.5}
+              ambientIntensity={1.5}
+            />
           </div>
 
           {/* 8-Column Grid Layout matching Door Dennis homeProjectsBlock */}
